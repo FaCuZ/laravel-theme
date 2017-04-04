@@ -1,4 +1,4 @@
-<?php namespace Teepluss\Theme;
+<?php namespace Facuz\Theme;
 
 use Closure;
 use ReflectionClass;
@@ -9,7 +9,7 @@ use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\View\Compilers\BladeCompiler;
 use Symfony\Component\HttpFoundation\Cookie;
-use Teepluss\Theme\Contracts\Theme as ThemeContract;
+use Facuz\Theme\Contracts\Theme as ThemeContract;
 
 class Theme implements ThemeContract
 {
@@ -49,7 +49,7 @@ class Theme implements ThemeContract
     /**
      * Asset.
      *
-     * @var \Teepluss\Assets
+     * @var \Facuz\Assets
      */
     protected $asset;
 
@@ -63,7 +63,7 @@ class Theme implements ThemeContract
     /**
      * Breadcrumb.
      *
-     * @var \Teepluss\Breadcrumb
+     * @var \Facuz\Breadcrumb
      */
     protected $breadcrumb;
 
@@ -129,11 +129,11 @@ class Theme implements ThemeContract
      * @param  \Illuminate\Config\Repository $config
      * @param  \Illuminate\Events\Dispatcher $events
      * @param  \Illuminate\View\Factory $view |
-     * @param  \Teepluss\Theme\asset $asset
+     * @param  \Facuz\Theme\asset $asset
      * @param  \Illuminate\Filesystem\Filesystem $files
-     * @param  \Teepluss\Breadcrumb|\Teepluss\Theme\Breadcrumb $breadcrumb
+     * @param  \Facuz\Breadcrumb|\Facuz\Theme\Breadcrumb $breadcrumb
      *
-     * @return \Teepluss\Theme\Theme
+     * @return \Facuz\Theme\Theme
      */
     public function __construct(Repository $config,
                                 Dispatcher $events,
@@ -665,7 +665,7 @@ class Theme implements ThemeContract
      * @param  string $className
      * @param  array $attributes
      * @throws UnknownWidgetClassException
-     * @return Teepluss\Theme\Widget
+     * @return Facuz\Theme\Widget
      */
     public function widget($className, $attributes = array())
     {
@@ -840,7 +840,7 @@ class Theme implements ThemeContract
     /**
      * Return asset instance.
      *
-     * @return \Teepluss\Theme\Asset
+     * @return \Facuz\Theme\Asset
      */
     public function asset()
     {
@@ -850,7 +850,7 @@ class Theme implements ThemeContract
     /**
      * Return breadcrumb instance.
      *
-     * @return \Teepluss\Theme\Breadcrumb
+     * @return \Facuz\Theme\Breadcrumb
      */
     public function breadcrumb()
     {

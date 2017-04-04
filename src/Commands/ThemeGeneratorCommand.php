@@ -1,4 +1,4 @@
-<?php namespace Teepluss\Theme\Commands;
+<?php namespace Facuz\Theme\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Config\Repository;
@@ -41,7 +41,7 @@ class ThemeGeneratorCommand extends Command {
      *
      * @param \Illuminate\Config\Repository     $config
      * @param \Illuminate\Filesystem\Filesystem $files
-     * @return \Teepluss\Theme\Commands\ThemeGeneratorCommand
+     * @return \Facuz\Theme\Commands\ThemeGeneratorCommand
      */
 	public function __construct(Repository $config, File $files)
 	{

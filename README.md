@@ -2,11 +2,11 @@
 
 Laravel-Theme is a theme management for Laravel 5+, it is the easiest way to organize your skins, layouts and assets.
 
-This package is based on [teepluss\theme](https://github.com/teepluss/laravel-theme/)..
+This package is based on [teepluss\theme](https://github.com/teepluss/laravel-theme/)
 
 ### Differences with teepluss version
 - Compatible with laravel 5.4+
-- Removed twig compatibility (Reduces the package by 90%)
+- Removed twig compatibility (Reduces the package by 94%)
 - More helper functions
 
 ### Installation
@@ -17,7 +17,7 @@ This package is based on [teepluss\theme](https://github.com/teepluss/laravel-th
 To get the latest version of Theme simply require it in your `composer.json` file.
 
 ~~~
-"facuz/laravel-theme": "^2.0"
+"facuz/laravel-themes": "^3.0"
 ~~~
 
 You'll then need to run `composer install` to download it and have the autoloader updated.
@@ -582,7 +582,7 @@ echo Theme::widget('demo', array('label' => 'Demo Widget'))->render();
 
 ### Using theme global
 ~~~php
-use Teepluss\Theme\Contracts\Theme;
+use Facuz\Theme\Contracts\Theme;
 use App\Http\Controllers\Controller;
 
 class BaseController extends Controller {

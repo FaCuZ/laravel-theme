@@ -1,7 +1,7 @@
 <?php namespace {widgetNamespace};
 
-use Teepluss\Theme\Theme;
-use Teepluss\Theme\Widget;
+use Facuz\Theme\Theme;
+use Facuz\Theme\Widget;
 
 class {widgetClass} extends Widget {
 

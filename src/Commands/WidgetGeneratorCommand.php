@@ -1,4 +1,4 @@
-<?php namespace Teepluss\Theme\Commands;
+<?php namespace Facuz\Theme\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Config\Repository;
@@ -48,7 +48,7 @@ class WidgetGeneratorCommand extends Command {
      *
      * @param \Illuminate\Config\Repository     $config
      * @param \Illuminate\Filesystem\Filesystem $files
-     * @return \Teepluss\Theme\Commands\WidgetGeneratorCommand
+     * @return \Facuz\Theme\Commands\WidgetGeneratorCommand
      */
     public function __construct(Repository $config, File $files)
     {

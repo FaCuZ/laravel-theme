@@ -1,4 +1,4 @@
-<?php namespace Teepluss\Theme\Contracts;
+<?php namespace Facuz\Theme\Contracts;
 
 interface Theme {
 

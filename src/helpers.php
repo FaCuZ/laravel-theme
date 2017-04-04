@@ -7,7 +7,7 @@ if (!function_exists('theme'))
 	 *
 	 * @param  string  $themeName
 	 * @param  string  $layoutName
-	 * @return \Teepluss\Theme\Theme
+	 * @return \Facuz\Theme\Theme
 	 */
 	function theme($themeName = null, $layoutName = null){
 		$theme = app('theme');

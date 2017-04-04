@@ -1,4 +1,4 @@
-<?php namespace Teepluss\Theme;
+<?php namespace Facuz\Theme;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -83,7 +83,7 @@ class ThemeServiceProvider extends ServiceProvider {
             return new Theme($app['config'], $app['events'], $app['view'], $app['asset'], $app['files'], $app['breadcrumb']);
         });
 
-        $this->app->alias('theme', 'Teepluss\Theme\Contracts\Theme');
+        $this->app->alias('theme', 'Facuz\Theme\Contracts\Theme');
     }
 
     /**
