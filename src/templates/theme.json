@@ -1,0 +1,9 @@
+{
+    "slug": "default",
+    "name": "Default",
+    "author": "John Doe",
+    "email": "johndoe@example.com",
+    "description": "This is an example theme.",
+    "web": "http://www.example.com",
+    "version": "1.0"
+}

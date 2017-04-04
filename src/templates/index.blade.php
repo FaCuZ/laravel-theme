@@ -1,0 +1,1 @@
+{!! Theme::partial('sections.main') !!}

@@ -21,8 +21,8 @@ return array(
 	| Theme Default
 	|--------------------------------------------------------------------------
 	|
-	| If you don't set a theme when using a "Theme" class the default theme
-	| will replace automatically.
+	| If you don't set a theme when using a "Theme" class 
+	| the default theme will replace automatically.
 	|
 	*/
 
@@ -33,8 +33,8 @@ return array(
 	| Layout Default
 	|--------------------------------------------------------------------------
 	|
-	| If you don't set a layout when using a "Theme" class the default layout
-	| will replace automatically.
+	| If you don't set a layout when using a "Theme" class 
+	| the default layout will replace automatically.
 	|
 	*/
 
@@ -56,8 +56,8 @@ return array(
 	| A pieces of theme collections
 	|--------------------------------------------------------------------------
 	|
-	| Inside a theme path we need to set up directories to
-	| keep "layouts", "assets" and "partials".
+	| Inside a theme path we need to set up directories 
+	| to keep "layouts", "assets" and "partials".
 	|
 	*/
 
@@ -87,8 +87,8 @@ return array(
 	| Listener from events
 	|--------------------------------------------------------------------------
 	|
-	| You can hook a theme when event fired on activities
-	| this is cool feature to set up a title, meta, default styles and scripts.
+	| You can hook a theme when event fired on activities this is cool
+	| feature to set up a title, meta, default styles and scripts.
 	|
 	*/
 
