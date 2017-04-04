@@ -1,19 +1,18 @@
 ## Theme Management for Laravel
 
-### For Laravel 4, please use the [v1.x branch](https://github.com/teepluss/laravel-theme/tree/v1.x)!
+Laravel-Theme is a theme management for Laravel 5+, it is the easiest way to organize your skins, layouts and assets.
 
-Theme is a theme management for Laravel 5, it is the easiest way to organize your skins, layouts and assets.
-Right now Theme supports PHP, Blade, and Twig.
+This package is based on [teepluss\theme](https://github.com/teepluss/laravel-theme/) and is compatible with laravel 5.4+ but not with twig.
 
 ### Installation
 
-- [Theme on Packagist](https://packagist.org/packages/teepluss/theme)
-- [Theme on GitHub](https://github.com/teepluss/laravel-theme)
+- [Theme on Packagist](https://packagist.org/packages/facuz/laravel-theme)
+- [Theme on GitHub](https://github.com/facuz/laravel-theme)
 
 To get the latest version of Theme simply require it in your `composer.json` file.
 
 ~~~
-"teepluss/theme": "^2.0"
+"facuz/laravel-theme": "^2.0"
 ~~~
 
 You'll then need to run `composer install` to download it and have the autoloader updated.
@@ -23,7 +22,7 @@ Once Theme is installed you need to register the service provider with the appli
 ~~~
 'providers' => [
 
-    Teepluss\Theme\ThemeServiceProvider::class,
+    Facuz\Theme\ThemeServiceProvider::class,
 
 ]
 ~~~
@@ -33,7 +32,7 @@ Theme also ships with a facade which provides the static syntax for creating col
 ~~~
 'aliases' => [
 
-    'Theme' => Teepluss\Theme\Facades\Theme::class,
+    'Theme' => Facuz\Theme\Facades\Theme::class,
 
 ]
 ~~~
@@ -41,7 +40,7 @@ Theme also ships with a facade which provides the static syntax for creating col
 Publish config using artisan CLI.
 
 ~~~
-php artisan vendor:publish --provider="Teepluss\Theme\ThemeServiceProvider"
+php artisan vendor:publish --provider="Facuz\Theme\ThemeServiceProvider"
 ~~~
 
 ## Usage
@@ -51,7 +50,6 @@ Theme has many features to help you get started with Laravel
 - [Create theme with artisan CLI](#create-theme-with-artisan-cli)
 - [Configuration](#configuration)
 - [Basic usage](#basic-usage)
-- [Compiler](#compiler)
 - [Render from string](#render-from-string)
 - [Compile string](#compile-string)
 - [Symlink from another view](#symlink-from-another-view)
@@ -79,7 +77,7 @@ To delete an existing theme, use the command:
 php artisan theme:destroy default
 ~~~
 
-> the type can be php, blade and twig.
+> the type can be php and blade.
 
 Create from the applicaton without CLI.
 
@@ -222,37 +220,18 @@ $which = $theme->scope('home.index')->location(true);
 echo $which; // ./public/themes/name/views/home/index.blade.php
 ~~~
 
-### Compiler
-
-Theme now supports PHP, Blade and Twig. To use Blade or Twig template you just create a file with extension
-~~~
-[file].blade.php or [file].twig.php
-~~~
-
 ### Render from string.
 
 ~~~php
-// Blade template.
 return $theme->string('<h1>{{ $name }}</h1>', array('name' => 'Teepluss'), 'blade')->render();
-
-// Twig Template
-return $theme->string('<h1>{{ name }}</h1>', array('name' => 'Teepluss'), 'twig')->render();
 ~~~
 
 ### Compile string
 
 ~~~php
-// Blade compile.
 $template = '<h1>Name: {{ $name }}</h1><p>{{ Theme::widget("WidgetIntro", array("userId" => 9999, "title" => "Demo Widget"))->render() }}</p>';
 
 echo Theme::blader($template, array('name' => 'Teepluss'));
-~~~
-
-~~~php
-// Twig compile.
-$template = '<h1>Name: {{ name }}</h1><p>{{ Theme.widget("WidgetIntro", {"userId" : 9999, "title" : "Demo Widget"}).render() }}</p>';
-
-echo Theme::twigy($template, array('name' => 'Teepluss'));
 ~~~
 
 ### Symlink from another view
@@ -636,10 +615,3 @@ public function getIndex()
     $this->theme->of('somewhere.index')->render();
 }
 ~~~
-
-## Support or Contact
-
-If you have any problems, Contact teepluss@gmail.com
-
-
-[![Support via PayPal](https://rawgithub.com/chris---/Donation-Badges/master/paypal.jpeg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9GEC8J7FAG6JA)
