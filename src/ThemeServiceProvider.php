@@ -39,12 +39,6 @@ class ThemeServiceProvider extends ServiceProvider {
         // Temp to use in closure.
         $app = $this->app;
 
-        // Add view extension.
-        $this->app['view']->addExtension('twig.php', 'twig', function() use ($app)
-        {
-            return new Engines\TwigEngine($app);
-        });
-
         // Register providers.
         $this->registerAsset();
         $this->registerTheme();

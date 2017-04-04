@@ -67,12 +67,11 @@ class ThemeGeneratorCommand extends Command {
 
 		$type = $this->option('type');
 
-		if ( ! in_array($type, array('php', 'blade', 'twig')))
+		if ( ! in_array($type, array('php', 'blade')))
 		{
-			// Blade or html.
-			$question = $this->ask('What type of template? [php|blade|twig]');
+			$question = $this->ask('What type of template? [php|blade]');
 
-			$type = in_array($question, array('php', 'blade', 'twig')) ? $question : 'php';
+			$type = in_array($question, array('php', 'blade')) ? $question : 'php';
 		}
 
 		// Directories.
@@ -96,12 +95,6 @@ class ThemeGeneratorCommand extends Command {
 				$this->makeFile('layouts/'.$layout.'.blade.php', $this->getTemplate('layout.blade'));
 				$this->makeFile('partials/header.blade.php', $this->getTemplate('header'));
 				$this->makeFile('partials/footer.blade.php', $this->getTemplate('footer'));
-				break;
-
-			case 'twig' :
-				$this->makeFile('layouts/'.$layout.'.twig.php', $this->getTemplate('layout.twig'));
-				$this->makeFile('partials/header.twig.php', $this->getTemplate('header'));
-				$this->makeFile('partials/footer.twig.php', $this->getTemplate('footer'));
 				break;
 
 			default :
@@ -213,7 +206,7 @@ class ThemeGeneratorCommand extends Command {
 
 		return array(
 			array('path', null, InputOption::VALUE_OPTIONAL, 'Path to theme directory.', $path),
-			array('type', null, InputOption::VALUE_OPTIONAL, 'Theme view type [php|blade|twig].', null),
+			array('type', null, InputOption::VALUE_OPTIONAL, 'Theme view type [php|blade].', null),
 			array('facade', null, InputOption::VALUE_OPTIONAL, 'Facade name.', null),
 		);
 	}

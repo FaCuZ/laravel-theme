@@ -99,12 +99,12 @@ class WidgetGeneratorCommand extends Command {
         // What is type you want?
         $type = $this->option('type');
 
-        if ( ! in_array($type, array('php', 'blade', 'twig')))
+        if ( ! in_array($type, array('php', 'blade')))
         {
             // Blade or html.
-            $question = $this->ask('What type of widget template? [php|blade|twig]');
+            $question = $this->ask('What type of widget template? [php|blade]');
 
-            $type = in_array($question, array('php', 'blade', 'twig')) ? $question : 'php';
+            $type = in_array($question, array('php', 'blade')) ? $question : 'php';
         }
 
         $widgetNamespace = $this->config->get('theme.namespaces.widget');
@@ -136,9 +136,6 @@ class WidgetGeneratorCommand extends Command {
         {
             case 'blade' :
                 $this->makeFile($container['widget'].'/'.$widgetClassTpl.'.blade.php', $this->getTemplate('widget.blade'));
-                break;
-            case 'twig' :
-                $this->makeFile($container['widget'].'/'.$widgetClassTpl.'.twig.php', $this->getTemplate('widget.twig'));
                 break;
             default :
                 $this->makeFile($container['widget'].'/'.$widgetClassTpl.'.php', $this->getTemplate('widget'));
@@ -248,7 +245,7 @@ class WidgetGeneratorCommand extends Command {
 
         return array(
             array('path', 'p', InputOption::VALUE_OPTIONAL, 'Path to theme directory.', $path),
-            array('type', 't', InputOption::VALUE_OPTIONAL, 'Widget view type [php|blade|twig].', null),
+            array('type', 't', InputOption::VALUE_OPTIONAL, 'Widget view type [php|blade].', null),
             array('global', 'g', InputOption::VALUE_NONE, 'Create global widget.', null)
         );
     }

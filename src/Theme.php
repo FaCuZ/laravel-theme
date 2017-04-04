@@ -7,7 +7,6 @@ use Illuminate\View\Factory;
 use Illuminate\Config\Repository;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
-use Teepluss\Theme\Compilers\TwigCompiler;
 use Illuminate\View\Compilers\BladeCompiler;
 use Symfony\Component\HttpFoundation\Cookie;
 use Teepluss\Theme\Contracts\Theme as ThemeContract;
@@ -165,8 +164,6 @@ class Theme implements ThemeContract
         // Blade compiler.
         $this->compilers['blade'] = new BladeCompiler($files, 'theme');
 
-        // Twig compiler.
-        $this->compilers['twig'] = new TwigCompiler($config, $view);
     }
 
     /**
@@ -792,18 +789,6 @@ class Theme implements ThemeContract
     }
 
     /**
-     * Compile twig.
-     *
-     * @param  string $str
-     * @param  array  $data
-     * @return string
-     */
-    public function twigy($str, $data = array())
-    {
-        return $this->getCompiler('twig')->setData($data)->compileString($str);
-    }
-
-    /**
      * Check region exists.
      *
      * @param  string  $region
@@ -897,13 +882,10 @@ class Theme implements ThemeContract
         // Keeping arguments.
         $this->arguments = $args;
 
-        // Compile string blade, string twig, or from file path.
+        // Compile string blade, or from file path.
         switch ($type) {
             case 'blade' :
                 $content = $this->bladerWithOutServerScript($view, $args);
-                break;
-            case 'twig' :
-                $content = $this->twigy($view, $args);
                 break;
             default :
                 $content = $this->view->make($view, $args)->render();
