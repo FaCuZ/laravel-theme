@@ -196,24 +196,17 @@ abstract class Widget {
      */
     public function render()
     {
-        if ($this->enable == false)
-        {
-            return '';
-        }
+        if($this->enable == false) return '';
 
-        $widgetDir = $this->config->get('theme.containerDir.widget');
-
-        $path = $this->theme->getThemeNamespace($widgetDir.'.'.$this->template);
+        $path = $this->theme->getThemeNamespace('widgets.'.$this->template);
 
         // If not found in theme widgets directory, try to watch in views/widgets again.
-        if ($this->watch === true and ! $this->view->exists($path))
-        {
-            $path = $widgetDir.'.'.$this->template;
+        if($this->watch === true and ! $this->view->exists($path)){
+            $path = 'widgets.'.$this->template;
         }
 
         // Error file not exists.
-        if ( ! $this->view->exists($path))
-        {
+        if(!$this->view->exists($path)){
             throw new UnknownWidgetFileException("Widget view [$this->template] not found.");
         }
 

@@ -64,13 +64,13 @@ class ThemeGeneratorCommand extends Command {
 		}
 
 		$this->makeDirs([
-						'asset/css',
-						'asset/js',
-						'asset/img',
+						'assets/css',
+						'assets/js',
+						'assets/img',
 						'layouts',
 						'partials/sections',
 						'views',
-						'widget',
+						'widgets',
 						]);
 
 		$this->makeFiles([
@@ -79,8 +79,8 @@ class ThemeGeneratorCommand extends Command {
 						'footer.blade.php'	=> 'partials/',
 						'main.blade.php'	=> 'partials/sections/',
 						'index.blade.php'	=> 'views/',
-						'style.css'			=> 'asset/css/',
-						'script.js'			=> 'asset/js/',
+						'style.css'			=> 'assets/css/',
+						'script.js'			=> 'assets/js/',
 						'theme.json'		=> '',
 						'gulpfile.js'		=> '',
 						'config.php'		=> ''

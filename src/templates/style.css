@@ -1,4 +1,19 @@
 body {
-	font-family:Tahoma, Geneva, sans-serif;
-	margin: 5px;
+    font-family: Tahoma, Geneva, sans-serif;
+    margin: 0;
+}
+
+header {
+    background-color: antiquewhite;
+    padding: 5px;
+}
+
+#main{
+    background-color: cornsilk;
+    padding: 10px;
+}
+
+footer {
+    background-color: aliceblue;
+    padding: 5px;
 }

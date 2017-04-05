@@ -410,7 +410,7 @@ class Theme implements ThemeContract
         $this->fire('appendBefore', $this);
 
         // Add asset path to asset container.
-        $this->asset->addPath($this->path().'/'.$this->getConfig('containerDir.asset'));
+        $this->asset->addPath($this->path().'/assets');
 
         return $this;
     }
@@ -595,7 +595,7 @@ class Theme implements ThemeContract
      */
     public function partial($view, $args = array())
     {
-        $partialDir = $this->getThemeNamespace($this->getConfig('containerDir.partial'));
+        $partialDir = $this->getThemeNamespace('partials');
 
         return $this->loadPartial($view, $partialDir, $args);
     }
@@ -654,8 +654,7 @@ class Theme implements ThemeContract
         try {
             return $this->partial($view, $args);
         } catch (UnknownPartialFileException $e) {
-            $partialDir = $this->getConfig('containerDir.partial');
-            return $this->loadPartial($view, $partialDir, $args);
+            return $this->loadPartial($view, 'partials', $args);
         }
     }
 
@@ -707,14 +706,12 @@ class Theme implements ThemeContract
      */
     public function partialComposer($view, $callback, $layout = null)
     {
-        $partialDir = $this->getConfig('containerDir.partial');
-
         if (! is_array($view)) {
             $view = array($view);
         }
 
         // Partial path with namespace.
-        $path = $this->getThemeNamespace($partialDir);
+        $path = $this->getThemeNamespace('partials');
 
         // This code support partialWithLayout.
         if (! is_null($layout)) {
@@ -929,10 +926,8 @@ class Theme implements ThemeContract
      */
     public function scope($view, $args = array(), $type = null)
     {
-        $viewDir = $this->getConfig('containerDir.view');
-
         // Add namespace to find in a theme path.
-        $path = $this->getThemeNamespace($viewDir.'.'.$view);
+        $path = $this->getThemeNamespace('views.'.$view);
 
         return $this->of($path, $args, $type);
     }
@@ -1121,10 +1116,7 @@ class Theme implements ThemeContract
         // Flush asset that need to serve.
         $this->asset->flush();
 
-        // Layout directory.
-        $layoutDir = $this->getConfig('containerDir.layout');
-
-        $path = $this->getThemeNamespace($layoutDir.'.'.$this->layout);
+        $path = $this->getThemeNamespace('layouts.'.$this->layout);
 
         if (! $this->view->exists($path)) {
             throw new UnknownLayoutFileException("Layout [$this->layout] not found.");

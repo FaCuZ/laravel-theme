@@ -78,9 +78,6 @@ class WidgetGeneratorCommand extends Command {
         // Get class template.
         $widgetClassTemplate = $this->getTemplate('widgetClass');
 
-        // Directories.
-        $container = $this->config->get('theme.containerDir');
-
         // Default create not on a global.
         $watch = 'false';
 
@@ -117,7 +114,7 @@ class WidgetGeneratorCommand extends Command {
         $this->files->put(app_path().'/Widgets/'.$widgetClassFile, $widgetClassTemplate);
 
         // Make file example.
-        $this->makeFile($container['widget'].'/'.$widgetClassTpl.'.blade.php', $this->getTemplate('widget.blade'));
+        $this->makeFile('widgets/'.$widgetClassTpl.'.blade.php', $this->getTemplate('widget.blade'));
 
         $this->info('Widget "'.$this->getWidgetName().'" has been created.');
     }

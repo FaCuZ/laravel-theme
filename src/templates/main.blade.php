@@ -1,3 +1,3 @@
 <section id="main">
-	Content
+	Main section
 </section>

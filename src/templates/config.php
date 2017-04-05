@@ -33,21 +33,28 @@ return array(
 		'before' => function($theme)
 		{
 			$theme->setTitle('Title example');
-
 			$theme->setAuthor('Jonh Doe');
 		},
 
 		'beforeRenderTheme' => function($theme)
 		{
+			$theme->asset()->usePath()->add('styles', 'css/style.css');
+			$theme->asset()->usePath()->add('scripts', 'js/script.js');
 
+
+			// You may use elixir to concat styles and scripts.
+			/*
 			$theme->asset()->usePath()->add('styles', 'dist/css/styles.css');
-
 			$theme->asset()->usePath()->add('scripts', 'dist/js/scripts.js');
+			*/
 
-			// You may use this event to set up your assets.
-			// $theme->asset()->usePath()->add('core', 'core.js');
-			// $theme->asset()->add('jquery', 'vendor/jquery/jquery.min.js');
-			// $theme->asset()->add('jquery-ui', 'vendor/jqueryui/jquery-ui.min.js', array('jquery'));
+
+			// Or you may use this event to set up your assets.
+			/*
+			$theme->asset()->usePath()->add('core', 'core.js');
+			$theme->asset()->add('jquery', 'vendor/jquery/jquery.min.js');
+			$theme->asset()->add('jquery-ui', 'vendor/jqueryui/jquery-ui.min.js', array('jquery'));
+			*/
 		},
 
 		'beforeRenderLayout' => array(
