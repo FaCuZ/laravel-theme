@@ -51,23 +51,6 @@ return array(
 
 	'themeDir' => 'themes',
 
-	/*
-	|--------------------------------------------------------------------------
-	| A pieces of theme collections
-	|--------------------------------------------------------------------------
-	|
-	| Inside a theme path we need to set up directories 
-	| to keep "layouts", "assets" and "partials".
-	|
-	*/
-
-	'containerDir' => array(
-		'layout'  => 'layouts',
-		'asset'   => 'assets',
-		'partial' => 'partials',
-		'widget'  => 'widgets',
-		'view'    => 'views'
-	),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -115,18 +98,5 @@ return array(
 		})
 
 	),
-
-	/*
-	|--------------------------------------------------------------------------
-	| Compiler engines.
-	|--------------------------------------------------------------------------
-	|
-	| Config for compiler engines.
-	|
-	*/
-
-	'engines' => array(
-
-	)
 
 );

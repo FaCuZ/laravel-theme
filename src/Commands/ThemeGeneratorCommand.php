@@ -63,10 +63,7 @@ class ThemeGeneratorCommand extends Command {
 			return $this->error('Theme "'.$this->getTheme().'" is already exists.');
 		}
 
-		// Directories from config.
-		$container = config('theme.containerDir');
-
-		$this->makeDir([
+		$this->makeDirs([
 						'asset/css',
 						'asset/js',
 						'asset/img',
@@ -74,21 +71,20 @@ class ThemeGeneratorCommand extends Command {
 						'partials/sections',
 						'views',
 						'widget',
-					   ]);
+						]);
 
-		// Make file example: makeFile('copy', 'to')
-		$this->makeFile('layout.blade.php', 'layouts/');
-		$this->makeFile('header.blade.php', 'partials/');
-		$this->makeFile('footer.blade.php', 'partials/');
-		$this->makeFile('main.blade.php', 'partials/sections/');
-		$this->makeFile('index.blade.php', 'views/');
-
-		$this->makeFile('style.css', 'asset/css/');
-		$this->makeFile('script.js', 'asset/js/');
-
-		$this->makeFile('theme.json');
-		$this->makeFile('gulpfile.js');
-		$this->makeFile('config.php');
+		$this->makeFiles([
+						'layout.blade.php'	=> 'layouts/',
+						'header.blade.php'	=> 'partials/',
+						'footer.blade.php'	=> 'partials/',
+						'main.blade.php'	=> 'partials/sections/',
+						'index.blade.php'	=> 'views/',
+						'style.css'			=> 'asset/css/',
+						'script.js'			=> 'asset/js/',
+						'theme.json'		=> '',
+						'gulpfile.js'		=> '',
+						'config.php'		=> ''
+						]);
 
 		$this->info('Theme "'.$this->getTheme().'" has been created.');
 	}
@@ -99,7 +95,7 @@ class ThemeGeneratorCommand extends Command {
 	 * @param  array $directory
 	 * @return void
 	 */
-	protected function makeDir($directory)
+	protected function makeDirs($directory)
 	{
 		foreach ($directory as $path) {
 			if (!$this->files->isDirectory($this->getPath($path))){
@@ -115,22 +111,24 @@ class ThemeGeneratorCommand extends Command {
 	 * @param  string $to
 	 * @return void
 	 */
-	protected function makeFile($file, $to = '')
+	protected function makeFiles($files)
 	{
-		$template = $this->getTemplate($file);
+		foreach ($files as $file => $to) {
+			$template = $this->getTemplate($file);
 
-		$path = $to.$file;
+			$path = $to.$file;
 
-		if (!$this->files->exists($this->getPath($path))){
-			$content = $this->getPath($path);
+			if (!$this->files->exists($this->getPath($path))){
+				$content = $this->getPath($path);
 
-			$facade = $this->option('facade');
-			
-			if (!is_null($facade)){
-				$template = preg_replace('/Theme(\.|::)/', $facade.'$1', $template);
+				$facade = $this->option('facade');
+				
+				if (!is_null($facade)){
+					$template = preg_replace('/Theme(\.|::)/', $facade.'$1', $template);
+				}
+
+				$this->files->put($content, $template);
 			}
-
-			$this->files->put($content, $template);
 		}
 	}
 
@@ -189,7 +187,7 @@ class ThemeGeneratorCommand extends Command {
 	 */
 	protected function getOptions()
 	{
-		$path = public_path().'/'.config('theme.themeDir');
+		$path = public_path().'/'.$this->config->get('theme.themeDir');
 
 		return array(
 			array('path', null, InputOption::VALUE_OPTIONAL, 'Path to theme directory.', $path),
