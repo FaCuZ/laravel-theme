@@ -4,17 +4,19 @@ Laravel-Theme is a theme management for Laravel 5+, it is the easiest way to org
 
 This package is based on [teepluss\theme](https://github.com/teepluss/laravel-theme/)
 
-### Differences with teepluss version
+##### Differences with teepluss version:
 - Compatible with laravel 5.4+
 - Removed twig compatibility (Reduces the package by 94%)
+- Better base template
+- Simplified configuration
 - More helper functions
 
 ### Installation
 
-- [Theme on Packagist](https://packagist.org/packages/facuz/laravel-theme)
-- [Theme on GitHub](https://github.com/facuz/laravel-theme)
+- [Theme on Packagist](https://packagist.org/packages/facuz/laravel-themes)
+- [Theme on GitHub](https://github.com/facuz/laravel-themes)
 
-To get the latest version of Theme simply require it in your `composer.json` file.
+To get the latest version of laravel-themes simply require it in your `composer.json` file.
 
 ~~~
 "facuz/laravel-themes": "^3.0"
@@ -41,12 +43,18 @@ Theme also ships with a facade which provides the static syntax for creating col
 
 ]
 ~~~
-
 Publish config using artisan CLI.
 
 ~~~
 php artisan vendor:publish --provider="Facuz\Theme\ThemeServiceProvider"
 ~~~
+
+It's recommended to add to the .env file the theme that we are going to use
+~~~
+APP_THEME=default
+~~~
+
+
 
 ## Usage
 
@@ -574,7 +582,7 @@ Now you will see a widget class at /app/Widgets/WidgetDemo.php
 <h1>User Id: {{ $label }}</h1>
 ~~~
 
-### Calling your widget in layout or view
+#### Calling your widget in layout or view
 
 ~~~php
 echo Theme::widget('demo', array('label' => 'Demo Widget'))->render();

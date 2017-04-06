@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'themeDefault' => 'default',
+	'themeDefault' => env('APP_THEME', 'default'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -38,7 +38,7 @@ return array(
 	|
 	*/
 
-	'layoutDefault' => 'default',
+	'layoutDefault' => 'layout',
 
 	/*
 	|--------------------------------------------------------------------------
