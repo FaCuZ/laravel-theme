@@ -61,9 +61,8 @@ class ThemeListCommand extends Command {
 	 */
 	public function fire()
 	{
-		dd((new Theme)->getThemeName()); 
-        
         $themes = [];
+        $empty = true;
 
         $path = $this->option('path');
 
@@ -71,12 +70,17 @@ class ThemeListCommand extends Command {
             $scannedThemes = $this->files->directories($path);
             foreach ($scannedThemes as $key => $theme) {
                 $themes[] = array($key+1, basename($theme));
+            	$empty = false;
             }
         }
-
+        
 		$headers = ['#', 'Nombre'];
 
-		$this->table($headers, $themes);
+		if(!$empty){
+			$this->table($headers, $themes);
+		} else {
+			$this->info("No themes installed");
+		}
 	}
 
 	/**

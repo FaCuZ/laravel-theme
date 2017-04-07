@@ -44,6 +44,7 @@ class ThemeServiceProvider extends ServiceProvider {
         $this->registerTheme();
         //$this->registerWidget();
         $this->registerBreadcrumb();
+        $this->registerManifest();
 
         // Register commands.
         $this->registerThemeGenerator();
@@ -82,7 +83,7 @@ class ThemeServiceProvider extends ServiceProvider {
     {
         $this->app->singleton('theme', function($app)
         {
-            return new Theme($app['config'], $app['events'], $app['view'], $app['asset'], $app['files'], $app['breadcrumb']);
+            return new Theme($app['config'], $app['events'], $app['view'], $app['asset'], $app['files'], $app['breadcrumb'], $app['manifest']);
         });
 
         $this->app->alias('theme', 'Facuz\Theme\Contracts\Theme');
@@ -111,6 +112,19 @@ class ThemeServiceProvider extends ServiceProvider {
         $this->app->singleton('breadcrumb', function($app)
         {
             return new Breadcrumb($app['files']);
+        });
+    }
+
+    /**
+     * Register manifest provider.
+     *
+     * @return void
+     */
+    public function registerManifest()
+    {
+        $this->app->singleton('manifest', function($app)
+        {
+            return new Manifest($app['files']);
         });
     }
 

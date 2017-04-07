@@ -11,6 +11,7 @@ use Illuminate\View\Compilers\BladeCompiler;
 use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\HttpFoundation\Cookie;
 use Facuz\Theme\Contracts\Theme as ThemeContract;
+use Facuz\Theme\Manifest;
 
 class Theme implements ThemeContract
 {
@@ -25,6 +26,13 @@ class Theme implements ThemeContract
      * @var \Illuminate\Config\Repository
      */
     protected $config;
+
+    /**
+     * Manifest.
+     *
+     * @var \Facuz\Theme\Manifest
+     */
+    protected $manifest;
 
     /**
      * Event dispatcher.
@@ -89,6 +97,13 @@ class Theme implements ThemeContract
      */
     protected $content;
 
+     /**
+     * Path of all themes.
+     *
+     * @var array
+     */
+    protected $themesPath;
+
     /**
      * Regions in the theme.
      *
@@ -102,6 +117,7 @@ class Theme implements ThemeContract
      * @var array
      */
     protected $arguments = array();
+
 
     /**
      * Data bindings.
@@ -133,6 +149,7 @@ class Theme implements ThemeContract
      * @param  \Facuz\Theme\asset $asset
      * @param  \Illuminate\Filesystem\Filesystem $files
      * @param  \Facuz\Breadcrumb|\Facuz\Theme\Breadcrumb $breadcrumb
+     * @param  \Facuz\Theme\Manifest $manifest
      *
      * @return \Facuz\Theme\Theme
      */
@@ -141,10 +158,13 @@ class Theme implements ThemeContract
                                 Factory $view,
                                 Asset $asset,
                                 Filesystem $files,
-                                Breadcrumb $breadcrumb)
+                                Breadcrumb $breadcrumb,
+                                Manifest $manifest)
     {
 
         $this->config = $config;
+
+        $this->manifest = $manifest;
 
         $this->events = $events;
 
@@ -162,9 +182,30 @@ class Theme implements ThemeContract
         // // Default layout.
         // $this->layout = $this->getConfig('layoutDefault');
 
-        // Blade compiler.
         $this->compilers['blade'] = new BladeCompiler($files, 'theme');
 
+        $this->themesPath = app('path.public').'/'.$this->path("");
+
+    }
+
+    /**
+     * Get or set data on manifest.
+     *
+     * @return Collection
+     */
+    public function manifest($property = null, $value = null) {
+
+        $this->manifest->setThemePath($this->getThemePath());
+
+        if($value && $property){
+            $this->manifest->setProperty($property, $value);
+            return $value;
+        } else {
+            if($property){
+                dd($this->manifest->getProperty($property));
+            }
+            return "mani";
+        }
     }
 
     /**
@@ -176,7 +217,7 @@ class Theme implements ThemeContract
     {
         $themes = [];
 
-        $path = app('path.public').'/'.$this->path("");
+        //$path = app('path.public').'/'.$this->path("");
 
         if ($this->files->exists($path)) {
             $scannedThemes = $this->files->directories($path);
@@ -481,6 +522,17 @@ class Theme implements ThemeContract
 
         return $themeDir.'/'.$theme;
     }
+
+    /**
+     * Get theme path.
+     *
+     * @return Collection
+     */
+    public function getThemePath()
+    {
+        return app('path.public').'/'.$this->path($this->theme);
+    }
+
 
     /**
      * Set a place to regions.
