@@ -48,12 +48,14 @@ class ThemeServiceProvider extends ServiceProvider {
         // Register commands.
         $this->registerThemeGenerator();
         $this->registerWidgetGenerator();
+        $this->registerThemeList();
         $this->registerThemeDestroy();
 
         // Assign commands.
         $this->commands(
             'theme.create',
             'theme.widget',
+            'theme.list',
             'theme.destroy'
         );
     }
@@ -148,6 +150,19 @@ class ThemeServiceProvider extends ServiceProvider {
         $this->app->singleton('theme.destroy', function($app)
         {
             return new Commands\ThemeDestroyCommand($app['config'], $app['files']);
+        });
+    } 
+
+    /**
+     * Register list themes.
+     *
+     * @return void
+     */
+    public function registerThemeList()
+    {
+        $this->app->singleton('theme.list', function($app)
+        {
+            return new Commands\ThemeListCommand($app['config'], $app['files']);
         });
     }
 

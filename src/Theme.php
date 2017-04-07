@@ -8,6 +8,7 @@ use Illuminate\Config\Repository;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\View\Compilers\BladeCompiler;
+use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\HttpFoundation\Cookie;
 use Facuz\Theme\Contracts\Theme as ThemeContract;
 
@@ -164,6 +165,26 @@ class Theme implements ThemeContract
         // Blade compiler.
         $this->compilers['blade'] = new BladeCompiler($files, 'theme');
 
+    }
+
+    /**
+     * Get all themes.
+     *
+     * @return Collection
+     */
+    public function all()
+    {
+        $themes = [];
+
+        $path = app('path.public').'/'.$this->path("");
+
+        if ($this->files->exists($path)) {
+            $scannedThemes = $this->files->directories($path);
+            foreach ($scannedThemes as $theme) {
+                $themes[] = basename($theme);
+            }
+        }
+        return new Collection($themes);
     }
 
     /**

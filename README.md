@@ -11,10 +11,28 @@ This package is based on [teepluss\theme](https://github.com/teepluss/laravel-th
 - Simplified configuration
 - More helper functions
 
-### Installation
+## Usage
 
-- [Theme on Packagist](https://packagist.org/packages/facuz/laravel-themes)
-- [Theme on GitHub](https://github.com/facuz/laravel-themes)
+Theme has many features to help you get started with Laravel
+
+- [Installation](#installation)
+- [Create theme with artisan CLI](#create-theme-with-artisan-cli)
+- [Configuration](#configuration)
+- [Basic usage](#basic-usage)
+- [Render from string](#render-from-string)
+- [Compile string](#compile-string)
+- [Symlink from another view](#symlink-from-another-view)
+- [Basic usage of assets](#basic-usage-of-assets)
+- [Preparing group of assets](#preparing-group-of-assets)
+- [Partials](#partials)
+- [Working with regions](#working-with-regions)
+- [Preparing data to view](#preparing-data-to-view)
+- [Breadcrumb](#breadcrumb)
+- [Widgets design structure](#widgets-design-structure)
+- [Using theme global](#using-theme-global)
+
+
+### Installation
 
 To get the latest version of laravel-themes simply require it in your `composer.json` file.
 
@@ -56,25 +74,6 @@ APP_THEME=default
 
 
 
-## Usage
-
-Theme has many features to help you get started with Laravel
-
-- [Create theme with artisan CLI](#create-theme-with-artisan-cli)
-- [Configuration](#configuration)
-- [Basic usage](#basic-usage)
-- [Render from string](#render-from-string)
-- [Compile string](#compile-string)
-- [Symlink from another view](#symlink-from-another-view)
-- [Basic usage of assets](#basic-usage-of-assets)
-- [Preparing group of assets](#preparing-group-of-assets)
-- [Partials](#partials)
-- [Working with regions](#working-with-regions)
-- [Preparing data to view](#preparing-data-to-view)
-- [Breadcrumb](#breadcrumb)
-- [Widgets design structure](#widgets-design-structure)
-- [Using theme global](#using-theme-global)
-
 ### Create theme with artisan CLI
 
 The first time you have to create theme "default" structure, using the artisan command:
@@ -90,12 +89,16 @@ To delete an existing theme, use the command:
 php artisan theme:destroy default
 ~~~
 
-> the type can be php and blade.
+If you wanna list all installed themes use the command:
+
+~~~
+php artisan theme:list
+~~~
 
 Create from the applicaton without CLI.
 
 ~~~php
-Artisan::call('theme:create', ['name' => 'foo', '--type' => 'blade']);
+Artisan::call('theme:create', ['name' => 'foo']);
 ~~~
 
 ### Configuration
