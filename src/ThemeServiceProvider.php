@@ -1,193 +1,221 @@
 <?php namespace Facuz\Theme;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class ThemeServiceProvider extends ServiceProvider {
 
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
+	/**
+	 * Indicates if loading of the provider is deferred.
+	 *
+	 * @var bool
+	 */
+	protected $defer = false;
 
-    /**
-     * Bootstrap the application events.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        $configPath = __DIR__.'/../config/theme.php';
+	/**
+	 * Bootstrap the application events.
+	 *
+	 * @return void
+	 */
+	public function boot()
+	{
+		$configPath = __DIR__.'/../config/theme.php';
 
-        // Publish config.
-        $this->publishes([$configPath => config_path('theme.php')], 'config');
-    }
+		// Publish config.
+		$this->publishes([$configPath => config_path('theme.php')], 'config');
+	}
 
-    /**
-     * Register service provider.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $configPath = __DIR__.'/../config/theme.php';
+	/**
+	 * Register service provider.
+	 *
+	 * @return void
+	 */
+	public function register()
+	{
+		$configPath = __DIR__.'/../config/theme.php';
 
-        // Merge config to allow user overwrite.
-        $this->mergeConfigFrom($configPath, 'theme');
+		// Merge config to allow user overwrite.
+		$this->mergeConfigFrom($configPath, 'theme');
 
-        // Temp to use in closure.
-        $app = $this->app;
+		// Temp to use in closure.
+		$app = $this->app;
 
-        // Register providers.
-        $this->registerAsset();
-        $this->registerTheme();
-        //$this->registerWidget();
-        $this->registerBreadcrumb();
-        $this->registerManifest();
+		// Register providers.
+		$this->registerAsset();
+		$this->registerTheme();
+		//$this->registerWidget();
+		$this->registerBreadcrumb();
+		$this->registerManifest();
 
-        // Register commands.
-        $this->registerThemeGenerator();
-        $this->registerWidgetGenerator();
-        $this->registerThemeList();
-        $this->registerThemeDestroy();
+		// Register commands.
+		$this->registerThemeGenerator();
+		$this->registerWidgetGenerator();
+		$this->registerThemeList();
+		$this->registerThemeDestroy();
 
-        // Assign commands.
-        $this->commands(
-            'theme.create',
-            'theme.widget',
-            'theme.list',
-            'theme.destroy'
-        );
-    }
+		// Assign commands.
+		$this->commands(
+						'theme.create',
+						'theme.widget',
+						'theme.list',
+						'theme.destroy'
+						);
 
-    /**
-     * Register asset provider.
-     *
-     * @return void
-     */
-    public function registerAsset()
-    {
-        $this->app->singleton('asset', function($app)
-        {
-            return new Asset();
-        });
-    }
+		$this->addToBlade(['get', 'echo Theme::get(%s);']);
+		$this->addToBlade(['getIfHas', 'echo Theme::has(%1$s) ? Theme::get(%1$s) : ""']);
 
-    /**
-     * Register theme provider.
-     *
-     * @return void
-     */
-    public function registerTheme()
-    {
-        $this->app->singleton('theme', function($app)
-        {
-            return new Theme($app['config'], $app['events'], $app['view'], $app['asset'], $app['files'], $app['breadcrumb'], $app['manifest']);
-        });
+		$this->addToBlade(['partial', 'echo Theme::partial(%s);']);
+		$this->addToBlade(['section', 'echo Theme::partial("sections.".%s);']);
+		$this->addToBlade(['content', null, 'echo Theme::content();']);
 
-        $this->app->alias('theme', 'Facuz\Theme\Contracts\Theme');
-    }
+		$this->addToBlade(['styles', 'echo Theme::asset()->container(%s)->styles();', 'echo Theme::asset()->styles();']);
+		$this->addToBlade(['scripts', 'echo Theme::asset()->container(%s)->scripts();', 'echo Theme::asset()->scripts();']);
 
-    /**
-     * Register widget provider.
-     *
-     * @return void
-     */
-    // public function registerWidget()
-    // {
-    //     $this->app['widget'] = $this->app->share(function($app)
-    //     {
-    //         return new Widget($app['view']);
-    //     });
-    // }
+	}
 
-    /**
-     * Register breadcrumb provider.
-     *
-     * @return void
-     */
-    public function registerBreadcrumb()
-    {
-        $this->app->singleton('breadcrumb', function($app)
-        {
-            return new Breadcrumb($app['files']);
-        });
-    }
+	/**
+	 * Set a blade directive
+	 *
+	 * @return void
+	 */
+	protected function addToBlade($array){
+		Blade::directive($array[0], function ($data) use ($array) {			
+			if(!$data) return '<?php '.$array[2].' ?>';
 
-    /**
-     * Register manifest provider.
-     *
-     * @return void
-     */
-    public function registerManifest()
-    {
-        $this->app->singleton('manifest', function($app)
-        {
-            return new Manifest($app['files']);
-        });
-    }
+			return sprintf('<?php '.$array[1].' ?>',
+				null !== $data ? $data : "get_defined_vars()['__data']"
+			);
+		});  
+	}
 
-    /**
-     * Register generator of theme.
-     *
-     * @return void
-     */
-    public function registerThemeGenerator()
-    {
-        $this->app->singleton('theme.create', function($app)
-        {
-            return new Commands\ThemeGeneratorCommand($app['config'], $app['files']);
-        });
-    }
 
-    /**
-     * Register generator of widget.
-     *
-     * @return void
-     */
-    public function registerWidgetGenerator()
-    {
-        $this->app->singleton('theme.widget', function($app)
-        {
-            return new Commands\WidgetGeneratorCommand($app['config'], $app['files']);
-        });
-    }
+	/**
+	 * Register asset provider.
+	 *
+	 * @return void
+	 */
+	public function registerAsset()
+	{
+		$this->app->singleton('asset', function($app)
+		{
+			return new Asset();
+		});
+	}
 
-    /**
-     * Register theme destroy.
-     *
-     * @return void
-     */
-    public function registerThemeDestroy()
-    {
-        $this->app->singleton('theme.destroy', function($app)
-        {
-            return new Commands\ThemeDestroyCommand($app['config'], $app['files']);
-        });
-    } 
+	/**
+	 * Register theme provider.
+	 *
+	 * @return void
+	 */
+	public function registerTheme()
+	{
+		$this->app->singleton('theme', function($app)
+		{
+			return new Theme($app['config'], $app['events'], $app['view'], $app['asset'], $app['files'], $app['breadcrumb'], $app['manifest']);
+		});
 
-    /**
-     * Register list themes.
-     *
-     * @return void
-     */
-    public function registerThemeList()
-    {
-        $this->app->singleton('theme.list', function($app)
-        {
-            return new Commands\ThemeListCommand($app['config'], $app['files']);
-        });
-    }
+		$this->app->alias('theme', 'Facuz\Theme\Contracts\Theme');
+	}
 
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array('asset', 'theme', 'widget', 'breadcrumb');
-    }
+	/**
+	 * Register widget provider.
+	 *
+	 * @return void
+	 */
+	// public function registerWidget()
+	// {
+	//     $this->app['widget'] = $this->app->share(function($app)
+	//     {
+	//         return new Widget($app['view']);
+	//     });
+	// }
+
+	/**
+	 * Register breadcrumb provider.
+	 *
+	 * @return void
+	 */
+	public function registerBreadcrumb()
+	{
+		$this->app->singleton('breadcrumb', function($app)
+		{
+			return new Breadcrumb($app['files']);
+		});
+	}
+
+	/**
+	 * Register manifest provider.
+	 *
+	 * @return void
+	 */
+	public function registerManifest()
+	{
+		$this->app->singleton('manifest', function($app)
+		{
+			return new Manifest($app['files']);
+		});
+	}
+
+	/**
+	 * Register generator of theme.
+	 *
+	 * @return void
+	 */
+	public function registerThemeGenerator()
+	{
+		$this->app->singleton('theme.create', function($app)
+		{
+			return new Commands\ThemeGeneratorCommand($app['config'], $app['files']);
+		});
+	}
+
+	/**
+	 * Register generator of widget.
+	 *
+	 * @return void
+	 */
+	public function registerWidgetGenerator()
+	{
+		$this->app->singleton('theme.widget', function($app)
+		{
+			return new Commands\WidgetGeneratorCommand($app['config'], $app['files']);
+		});
+	}
+
+	/**
+	 * Register theme destroy.
+	 *
+	 * @return void
+	 */
+	public function registerThemeDestroy()
+	{
+		$this->app->singleton('theme.destroy', function($app)
+		{
+			return new Commands\ThemeDestroyCommand($app['config'], $app['files']);
+		});
+	} 
+
+	/**
+	 * Register list themes.
+	 *
+	 * @return void
+	 */
+	public function registerThemeList()
+	{
+		$this->app->singleton('theme.list', function($app)
+		{
+			return new Commands\ThemeListCommand($app['config'], $app['files']);
+		});
+	}
+
+	/**
+	 * Get the services provided by the provider.
+	 *
+	 * @return array
+	 */
+	public function provides()
+	{
+		return array('asset', 'theme', 'widget', 'breadcrumb');
+	}
 
 }

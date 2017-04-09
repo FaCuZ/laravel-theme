@@ -1,3 +1,6 @@
 <section id="main">
-	Main section
+	Main Section
+	<small>
+		[{!! protectEmail('email@example.com') !!}]
+	</small>
 </section>

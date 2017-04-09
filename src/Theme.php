@@ -202,9 +202,9 @@ class Theme implements ThemeContract
             return $value;
         } else {
             if($property){
-                dd($this->manifest->getProperty($property));
+                return $this->manifest->getProperty($property);
             }
-            return "mani";
+            return null;
         }
     }
 

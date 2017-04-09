@@ -42,15 +42,15 @@ return array(
 			$theme->asset()->usePath()->add('scripts', 'js/script.js');
 
 
-			// You may use elixir to concat styles and scripts.
 			/*
+			// You may use elixir to concat styles and scripts.
 			$theme->asset()->usePath()->add('styles', 'dist/css/styles.css');
 			$theme->asset()->usePath()->add('scripts', 'dist/js/scripts.js');
 			*/
 
 
-			// Or you may use this event to set up your assets.
 			/*
+			// Or you may use this event to set up your assets.
 			$theme->asset()->usePath()->add('core', 'core.js');
 			$theme->asset()->add('jquery', 'vendor/jquery/jquery.min.js');
 			$theme->asset()->add('jquery-ui', 'vendor/jqueryui/jquery-ui.min.js', array('jquery'));

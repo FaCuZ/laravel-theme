@@ -1,38 +1,38 @@
-## Theme Management for Laravel
+# Theme Management for Laravel
 
 Laravel-Theme is a theme management for Laravel 5+, it is the easiest way to organize your skins, layouts and assets.
 
 This package is based on [teepluss\theme](https://github.com/teepluss/laravel-theme/)
 
-##### Differences with teepluss version:
-- Compatible with laravel 5.4+.
-- Removed twig compatibility (Reduces the package by 94%).
-- Better base template.
-- Simplified configuration.
-- More helper functions and commands.
+>##### Differences with teepluss version:
+>- Compatible with laravel 5.4+.
+>- Removed twig compatibility (Reduces the package by 94%).
+>- Blade directives
+>- Better base template.
+>- Simplified configuration.
+>- More commands and helper functions.
+>- Better README file.
 
 ## Usage
 
 Theme has many features to help you get started with Laravel
 
 - [Installation](#installation)
-- [Create theme with artisan CLI](#create-theme-with-artisan-cli)
+- [Create new theme](#create-new-theme)
 - [Configuration](#configuration)
 - [Basic usage](#basic-usage)
-- [Render from string](#render-from-string)
-- [Compile string](#compile-string)
 - [Symlink from another view](#symlink-from-another-view)
 - [Basic usage of assets](#basic-usage-of-assets)
-- [Preparing group of assets](#preparing-group-of-assets)
 - [Partials](#partials)
-- [Working with regions](#working-with-regions)
+- [Magic methods](#magic-methods)
 - [Preparing data to view](#preparing-data-to-view)
 - [Breadcrumb](#breadcrumb)
-- [Widgets design structure](#widgets-design-structure)
+- [Widgets](#widgets)
 - [Using theme global](#using-theme-global)
+- [Cheatsheet](#cheatsheet)
 
 
-### Installation
+## Installation
 
 To get the latest version of laravel-themes simply require it in your `composer.json` file.
 
@@ -74,7 +74,7 @@ APP_THEME=default
 
 
 
-### Create theme with artisan CLI
+## Create new theme
 
 The first time you have to create theme "default" structure, using the artisan command:
 
@@ -101,63 +101,68 @@ Create from the applicaton without CLI.
 Artisan::call('theme:create', ['name' => 'foo']);
 ~~~
 
-### Configuration
+## Configuration
 
-After the config is published, you will see the config file in "config/theme", but all the configuration can be replaced by a config file inside a theme.
-
-> Theme config location: /public/themes/[theme]/config.php
+After the config is published, you will see a global config file `/config/theme.php`, all the configuration can be replaced by a config file inside a theme: `/public/themes/[theme]/config.php`
 
 The config is convenient for setting up basic CSS/JS, partial composer, breadcrumb template and also metas.
 
-Example:
 ~~~php
 'events' => array(
 
-    // Before event inherit from package config and the theme that call before,
-    // you can use this event to set meta, breadcrumb template or anything
-    // you want inheriting.
+    /* 
+     * Before event inherit from package config and the theme that call
+     * before, you can use this event to set meta, breadcrumb
+     * template or anything you want inheriting.
+     */
     'before' => function($theme)
     {
-        // You can remove this line anytime.
-        $theme->setTitle('Copyright ©  2013 - Laravel.in.th');
+        // You can remove this lines anytime.
+        $theme->setTitle('Title Example');
+        $theme->setAuthor('John Doe');
+        $theme->setKeywords('Example, Web');
 
-        // Breadcrumb template.
-        // $theme->breadcrumb()->setTemplate('
-        //     <ul class="breadcrumb">
-        //     @foreach ($crumbs as $i => $crumb)
-        //         @if ($i != (count($crumbs) - 1))
-        //         <li><a href="{{ $crumb["url"] }}">{{ $crumb["label"] }}</a><span class="divider">/</span></li>
-        //         @else
-        //         <li class="active">{{ $crumb["label"] }}</li>
-        //         @endif
-        //     @endforeach
-        //     </ul>
-        // ');
+        /*
+        Breadcrumb template.
+        $theme->breadcrumb()->setTemplate('        
+             <ul class="breadcrumb">
+             @foreach ($crumbs as $i => $crumb)
+                 @if ($i != (count($crumbs) - 1))
+                 	<li><a href="{{ $crumb["url"] }}">{{ $crumb["label"] }}</a><span class="divider">/</span></li>
+                 @else
+                 	<li class="active">{{ $crumb["label"] }}</li>
+                 @endif
+             @endforeach
+             </ul>             
+         ');
+         */
     },
 
-    // Listen on event before render a theme,
-    // this event should call to assign some assets,
-    // breadcrumb template.
+	/*
+     * Listen on event before render a theme, this event should
+     * call to assign some assets, breadcrumb template.
+     */
     'beforeRenderTheme' => function($theme)
     {
         // You may use this event to set up your assets.
-        // $theme->asset()->usePath()->add('core', 'core.js');
-        // $theme->asset()->add('jquery', 'vendor/jquery/jquery.min.js');
-        // $theme->asset()->add('jquery-ui', 'vendor/jqueryui/jquery-ui.min.js', array('jquery'));
+        /*
+        $theme->asset()->usePath()->add('core', 'core.js');
+        $theme->asset()->add('jquery', 'vendor/jquery/jquery.min.js');
+        $theme->asset()->add('jquery-ui', 'vendor/jqueryui/jquery-ui.min.js', array('jquery'));
 
-
-        // $theme->partialComposer('header', function($view)
-        // {
-        //     $view->with('auth', Auth::user());
-        // });
+        $theme->partialComposer('header', function($view){
+            $view->with('auth', Auth::user());
+        });
+        */
     },
 
-    // Listen on event before render a layout,
-    // this should call to assign style, script for a layout.
+    /*
+     * Listen on event before render a layout, this should 
+     * call to assign style, script for a layout.
+     */
     'beforeRenderLayout' => array(
 
-        'default' => function($theme)
-        {
+        'default' => function($theme){
             // $theme->asset()->usePath()->add('ipad', 'css/layouts/ipad.css');
         }
 
@@ -166,7 +171,7 @@ Example:
 )
 ~~~
 
-### Basic usage
+## Basic usage
 
 ~~~php
 namespace App\Http\Controllers;
@@ -220,9 +225,9 @@ return $theme->watch('home.index')->render();
 To check whether a theme exists.
 
 ~~~php
-// Returns boolean.
 Theme::exists('themename');
 ~~~
+> Returns boolean.
 
 To find the location of a view.
 
@@ -236,13 +241,13 @@ $which = $theme->scope('home.index')->location(true);
 echo $which; // ./public/themes/name/views/home/index.blade.php
 ~~~
 
-### Render from string.
+#### Render from string:
 
 ~~~php
 return $theme->string('<h1>{{ $name }}</h1>', array('name' => 'Teepluss'), 'blade')->render();
 ~~~
 
-### Compile string
+#### Compile string:
 
 ~~~php
 $template = '<h1>Name: {{ $name }}</h1><p>{{ Theme::widget("WidgetIntro", array("userId" => 9999, "title" => "Demo Widget"))->render() }}</p>';
@@ -250,7 +255,7 @@ $template = '<h1>Name: {{ $name }}</h1><p>{{ Theme::widget("WidgetIntro", array(
 echo Theme::blader($template, array('name' => 'Teepluss'));
 ~~~
 
-### Symlink from another view
+#### Symlink from another view
 
 This is a nice feature when you have multiple files that have the same name, but need to be located as a separate one.
 
@@ -269,7 +274,7 @@ Theme::symlink('a');
 // That's it!
 ~~~
 
-### Basic usage of assets
+## Basic usage of assets
 
 Add assets in your route.
 
@@ -320,14 +325,14 @@ $theme->asset()->writeContent('custom-inline-script', '
 ', $dependencies);
 ~~~
 
-Render styles and scripts in your layout.
+Render styles and scripts in your blade layout.
 
 ~~~php
 // Without container
-echo Theme::asset()->styles();
+@styles()
 
 // With "footer" container
-echo Theme::asset()->container('footer')->scripts();
+@scripts('footer')
 ~~~
 
 Direct path to theme asset.
@@ -336,7 +341,7 @@ Direct path to theme asset.
 echo Theme::asset()->url('img/image.png');
 ~~~
 
-### Preparing group of assets.
+#### Preparing group of assets:
 
 Some assets you don't want to add on a page right now, but you still need them sometimes, so "cook" and "serve" is your magic.
 
@@ -379,38 +384,43 @@ Serve theme when you need.
 Theme::asset()->serve('backbone');
 ~~~
 
-Then you can get output.
-~~~html
-...
+Then you can get output:
+~~~php
+---
 <head>
-    <?php echo Theme::asset()->scripts(); ?>
-    <?php echo Theme::asset()->styles(); ?>
-    <?php echo Theme::asset()->container('YOUR_CONTAINER')->scripts(); ?>
-    <?php echo Theme::asset()->container('YOUR_CONTAINER')->styles(); ?>
+    @styles()
+    @styles('YOUR_CONTAINER')
 </head>
-...
+<body>
+	---
+	@scripts()
+    @scripts('YOUR_CONTAINER')
+</body>
+---
 ~~~
 
-### Partials
+## Partials
 
-Render a partial in your layouts or views.
+Render a partial in your layouts or views:
+~~~php
+@partial('header', ['title' => 'Header']);
+~~~
+
+> This will look up to `/public/themes/[theme]/partials/header.php`, and will add a variable `$title` (opcional)
+
+Partial with current layout specific:
+~~~php
+Theme::partialWithLayout('header', ['title' => 'Header']);
+~~~
+> This will look up up to `/public/themes/[theme]/partials/[CURRENT_LAYOUT]/header.php`
+
+Finding from both theme's partial and application's partials:
 
 ~~~php
-// This will look up to "public/themes/[theme]/partials/header.php"
-echo Theme::partial('header', array('title' => 'Header'));
-
-// Partial with current layout specific.
-// This will look up up to "public/themes/[theme]/partials/[CURRENT_LAYOUT]/header.php"
-echo Theme::partialWithLayout('header', array('title' => 'Header'));
+Theme::watchPartial('header', ['title' => 'Header']);
 ~~~
 
-Finding from both theme's partial and application's partials.
-
-~~~php
-echo Theme::watchPartial('header', array('title' => 'Header'));
-~~~
-
-Partial composer.
+##### Partial composer:
 
 ~~~php
 $theme->partialComposer('header', function($view)
@@ -425,9 +435,22 @@ $theme->partialComposer('header', function($view)
 }, 'layout-name');
 ~~~
 
-### Working with regions.
+### Sections
 
-Theme has magic methods to set, prepend and append anything.
+The `@section` blade directive simplify the access to `/partials/sections/` path:
+~~~php
+@section('main');
+~~~
+
+It's the same as:
+~~~php
+@partial('sections.main');
+~~~
+
+
+## Magic methods
+
+Magic methods allow you to set, prepend and append anything.
 
 ~~~php
 $theme->setTitle('Your title');
@@ -440,60 +463,59 @@ $theme->setAnything('anything');
 
 $theme->setFoo('foo');
 
-// or
-
 $theme->set('foo', 'foo');
 ~~~
 
-Render in your layout or view.
+Render in your blade layout or view:
 
 ~~~php
+@get('foo')
+
 Theme::getAnything();
 
 Theme::getFoo();
 
-// or use place.
-
-Theme::place('anything');
-
-Theme::place('foo', 'default-value-if-it-does-not-exist');
-
-// or
-
 Theme::get('foo');
 ~~~
 
-Check if the place exists or not.
+or use place:
 
 ~~~php
-<?php if (Theme::has('title')) : ?>
-    <?php echo Theme::place('title'); ?>
-<?php endif; ?>
+Theme::place('anything');
 
-// or
+Theme::place('foo', 'default-value-if-it-does-not-exist');
+~~~
 
-<?php if (Theme::hasTitle()) : ?>
-    <?php echo Theme::getTitle(); ?>
-<?php endif; ?>
+##### Check if the place exists or not:
+~~~php
+@getIfHas('title')
+~~~
+It's the same as:
+~~~php
+@if(Theme::has('title'))
+    {{ Theme::place('title') }}
+@endif
+~~~
+~~~php
+@if(Theme::hasTitle())
+    {{ Theme::getTitle() }}
+@endif
 ~~~
 
 Get argument assigned to content in layout or region.
 
 ~~~php
 Theme::getContentArguments();
-
-// or
-
 Theme::getContentArgument('name');
-
-// To check if it exists
-
+~~~
+To check if it exists
+~~~php
 Theme::hasContentArgument('name');
 ~~~
 
 > Theme::place('content') is a reserve region to render sub-view.
 
-### Preparing data to view
+## Preparing data to view
 
 Sometimes you don't need to execute heavy processing, so you can prepare and use when you need it.
 
@@ -510,7 +532,7 @@ Using bound data on view.
 echo Theme::bind('something');
 ~~~
 
-### Breadcrumb
+## Breadcrumb
 
 In order to use breadcrumbs, follow the instruction below:
 
@@ -546,38 +568,32 @@ You can set up breadcrumbs template anywhere you want by using a blade template.
 ~~~php
 $theme->breadcrumb()->setTemplate('
     <ul class="breadcrumb">
-    @foreach ($crumbs as $i => $crumb)
-        @if ($i != (count($crumbs) - 1))
-        <li><a href="{{ $crumb["url"] }}">{{ $crumb["label"] }}</a><span class="divider">/</span></li>
-        @else
-        <li class="active">{{ $crumb["label"] }}</li>
-        @endif
-    @endforeach
+      @foreach ($crumbs as $i => $crumb)
+          @if ($i != (count($crumbs) - 1))
+              <li><a href="{{ $crumb["url"] }}">{{ $crumb["label"] }}</a><span class="divider">/</span></li>
+          @else
+              <li class="active">{{ $crumb["label"] }}</li>
+          @endif
+      @endforeach
     </ul>
 ');
 ~~~
 
-## Widgets Design Structure
+## Widgets
 
 Theme has many useful features called "widget" that can be anything.
+You can create a global widget class using artisan command:
 
-### Creating a widget
-
-You can create a widget class using artisan command:
-
-Creating as a global.
-~~~
-php artisan theme:widget demo --global --type=blade
+~~~bash
+php artisan theme:widget demo --global
 ~~~
 > Widget tpl is located in "resources/views/widgets/{widget-tpl}.{extension}"
 
 Creating a specific theme name.
 ~~~
-php artisan theme:widget demo default --type=blade
+php artisan theme:widget demo default 
 ~~~
 > Widget tpl is located in "public/themes/[theme]/widgets/{widget-tpl}.{extension}"
-
-> The file name can be demo.php, demo.blade.php or demo.twig.php
 
 Now you will see a widget class at /app/Widgets/WidgetDemo.php
 
@@ -585,13 +601,13 @@ Now you will see a widget class at /app/Widgets/WidgetDemo.php
 <h1>User Id: {{ $label }}</h1>
 ~~~
 
-#### Calling your widget in layout or view
+##### Calling your widget in layout or view:
 
 ~~~php
 echo Theme::widget('demo', array('label' => 'Demo Widget'))->render();
 ~~~
 
-### Using theme global
+## Using theme global
 ~~~php
 use Facuz\Theme\Contracts\Theme;
 use App\Http\Controllers\Controller;
@@ -633,9 +649,54 @@ public function getIndex()
 ~~~
 
 
-### Helper
-
-Protect the Email address against bots or spiders that index or harvest addresses for sending you spam.
+## Helpers
+##### Protect emails:
+Protect the email address against bots or spiders that index or harvest addresses for sending you spam.
 ~~~php
 {!! protectEmail('email@example.com') !!}
 ~~~
+##### Metadata init:
+Print meta tags with common metadata.
+~~~php
+{!! meta_init() !!}
+~~~
+> Returns: `<meta charset="utf-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> <meta name="viewport" content="width=device-width, initial-scale=1">`
+  
+## Cheatsheet
+##### Commands:
+Command | Description 
+------------ | -------------
+`artisan theme:create name` | Generate theme structure
+`artisan theme:destroy name` | Remove theme exsisting
+`artisan theme:list` | Show a list of all themes.
+`artisan theme:widget name` | Generate widget structure
+
+##### Blade Directives:
+Blade | Description 
+------------ | -------------
+`@get('value')` |  Magic method for get. 
+`@getIfHas('value')` | Like `@get` but show only if exist
+`@partial('value', ['var'=> 'optional'])` | Load the partial from current theme.
+`@section('value', ['var'=> 'optional'])` | Like `@partial` but load from sections folder
+`@content()` | Load the content of the selected view
+`@styles('optional')` | Render styles declared in theme config.
+`@scripts('optional')` | Render scripts declared in theme config.
+
+##### Helpers:
+Helper | Description 
+------------ | -------------
+`protectEmail('email')` | Protect the email address against bots or spiders
+`meta_init()` | Print meta tags with common metadata.
+
+
+
+
+
+
+
+
+
+
+
+
+
