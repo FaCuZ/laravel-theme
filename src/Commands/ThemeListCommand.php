@@ -125,7 +125,7 @@ class ThemeListCommand extends Command {
 	 */
 	protected function getOptions()
 	{
-		$path = public_path().'/'.$this->config->get('theme.themeDir');
+		$path = base_path($this->config->get('theme.themeDir'));
 
 		return array(
 			array('path', null, InputOption::VALUE_OPTIONAL, 'Path to theme directory.', $path)

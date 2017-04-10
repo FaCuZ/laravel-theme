@@ -38,7 +38,7 @@ return array(
 	|
 	*/
 
-	'layoutDefault' => 'layout',
+	'layoutDefault' => env('APP_THEME_LAYOUT', 'layout'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -49,7 +49,7 @@ return array(
 	|
 	*/
 
-	'themeDir' => 'themes',
+	'themeDir' => 'public/themes',
 
 
 	/*

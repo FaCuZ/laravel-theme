@@ -47,7 +47,7 @@ Once Theme is installed you need to register the service provider with the appli
 ~~~
 'providers' => [
 
-    Facuz\Theme\ThemeServiceProvider::class,
+	Facuz\Theme\ThemeServiceProvider::class,
 
 ]
 ~~~
@@ -57,7 +57,7 @@ Theme also ships with a facade which provides the static syntax for creating col
 ~~~
 'aliases' => [
 
-    'Theme' => Facuz\Theme\Facades\Theme::class,
+	'Theme' => Facuz\Theme\Facades\Theme::class,
 
 ]
 ~~~
@@ -110,65 +110,65 @@ The config is convenient for setting up basic CSS/JS, partial composer, breadcru
 ~~~php
 'events' => array(
 
-    /* 
-     * Before event inherit from package config and the theme that call
-     * before, you can use this event to set meta, breadcrumb
-     * template or anything you want inheriting.
-     */
-    'before' => function($theme)
-    {
-        // You can remove this lines anytime.
-        $theme->setTitle('Title Example');
-        $theme->setAuthor('John Doe');
-        $theme->setKeywords('Example, Web');
+	/* 
+	 * Before event inherit from package config and the theme that call
+	 * before, you can use this event to set meta, breadcrumb
+	 * template or anything you want inheriting.
+	 */
+	'before' => function($theme)
+	{
+		// You can remove this lines anytime.
+		$theme->setTitle('Title Example');
+		$theme->setAuthor('John Doe');
+		$theme->setKeywords('Example, Web');
 
-        /*
-        Breadcrumb template.
-        $theme->breadcrumb()->setTemplate('        
-             <ul class="breadcrumb">
-             @foreach ($crumbs as $i => $crumb)
-                 @if ($i != (count($crumbs) - 1))
-                 	<li><a href="{{ $crumb["url"] }}">{{ $crumb["label"] }}</a><span class="divider">/</span></li>
-                 @else
-                 	<li class="active">{{ $crumb["label"] }}</li>
-                 @endif
-             @endforeach
-             </ul>             
-         ');
-         */
-    },
+		/*
+		Breadcrumb template.
+		$theme->breadcrumb()->setTemplate('        
+			 <ul class="breadcrumb">
+			 @foreach ($crumbs as $i => $crumb)
+				 @if ($i != (count($crumbs) - 1))
+					<li><a href="{{ $crumb["url"] }}">{{ $crumb["label"] }}</a><span class="divider">/</span></li>
+				 @else
+					<li class="active">{{ $crumb["label"] }}</li>
+				 @endif
+			 @endforeach
+			 </ul>             
+		 ');
+		 */
+	 },
 
 	/*
-     * Listen on event before render a theme, this event should
-     * call to assign some assets, breadcrumb template.
-     */
-    'beforeRenderTheme' => function($theme)
-    {
-        // You may use this event to set up your assets.
-        /*
-        $theme->asset()->usePath()->add('core', 'core.js');
-        $theme->asset()->add('jquery', 'vendor/jquery/jquery.min.js');
-        $theme->asset()->add('jquery-ui', 'vendor/jqueryui/jquery-ui.min.js', array('jquery'));
+	 * Listen on event before render a theme, this event should
+	 * call to assign some assets, breadcrumb template.
+	 */
+	'beforeRenderTheme' => function($theme)
+	{
+		// You may use this event to set up your assets.
+		/*
+		$theme->asset()->usePath()->add('core', 'core.js');
+		$theme->asset()->add('jquery', 'vendor/jquery/jquery.min.js');
+		$theme->asset()->add('jquery-ui', 'vendor/jqueryui/jquery-ui.min.js', array('jquery'));
 
-        $theme->partialComposer('header', function($view){
-            $view->with('auth', Auth::user());
-        });
-        */
-    },
+		$theme->partialComposer('header', function($view){
+			$view->with('auth', Auth::user());
+		});
+		*/
+	},
 
-    /*
-     * Listen on event before render a layout, this should 
-     * call to assign style, script for a layout.
-     */
-    'beforeRenderLayout' => array(
+	/*
+	 * Listen on event before render a layout, this should 
+	 * call to assign style, script for a layout.
+	 */
+	'beforeRenderLayout' => array(
 
-        'default' => function($theme){
-            // $theme->asset()->usePath()->add('ipad', 'css/layouts/ipad.css');
-        }
+		'default' => function($theme){
+			// $theme->asset()->usePath()->add('ipad', 'css/layouts/ipad.css');
+		}
 
-    )
+		)
 
-)
+	)
 ~~~
 
 ## Basic usage
@@ -180,36 +180,36 @@ use Theme;
 
 class HomeController extends Controller {
 
-    public function getIndex()
-    {
-        $theme = Theme::uses('default')->layout('mobile');
+	public function getIndex()
+	{
+		$theme = Theme::uses('default')->layout('mobile');
 
-        $view = array(
-            'name' => 'Teepluss'
-        );
+		$view = array(
+			'name' => 'Teepluss'
+		);
 
-        // home.index will look up the path 'resources/views/home/index.php'
-        return $theme->of('home.index', $view)->render();
+		// home.index will look up the path 'resources/views/home/index.php'
+		return $theme->of('home.index', $view)->render();
 
-        // Specific status code with render.
-        return $theme->of('home.index', $view)->render(200);
+		// Specific status code with render.
+		return $theme->of('home.index', $view)->render(200);
 
-        // home.index will look up the path 'resources/views/mobile/home/index.php'
-        return $theme->ofWithLayout('home.index', $view)->render();
+		// home.index will look up the path 'resources/views/mobile/home/index.php'
+		return $theme->ofWithLayout('home.index', $view)->render();
 
-        // home.index will look up the path 'public/themes/default/views/home/index.php'
-        return $theme->scope('home.index', $view)->render();
+		// home.index will look up the path 'public/themes/default/views/home/index.php'
+		return $theme->scope('home.index', $view)->render();
 
-        // home.index will look up the path 'public/themes/default/views/mobile/home/index.php'
-        return $theme->scopeWithLayout('home.index', $view)->render();
+		// home.index will look up the path 'public/themes/default/views/mobile/home/index.php'
+		return $theme->scopeWithLayout('home.index', $view)->render();
 
-        // Looking for a custom path.
-        return $theme->load('app.somewhere.viewfile', $view)->render();
+		// Looking for a custom path.
+		return $theme->load('app.somewhere.viewfile', $view)->render();
 
-        // Working with cookie.
-        $cookie = Cookie::make('name', 'Tee');
-        return $theme->of('home.index', $view)->withCookie($cookie)->render();
-    }
+		// Working with cookie.
+		$cookie = Cookie::make('name', 'Tee');
+		return $theme->of('home.index', $view)->withCookie($cookie)->render();
+	}
 
 }
 ~~~
@@ -305,23 +305,23 @@ $dependencies = array();
 
 // Writing an in-line script.
 $theme->asset()->writeScript('inline-script', '
-    $(function() {
-        console.log("Running");
-    })
+	$(function() {
+		console.log("Running");
+	})
 ', $dependencies);
 
 // Writing an in-line style.
 $theme->asset()->writeStyle('inline-style', '
-    h1 { font-size: 0.9em; }
+	h1 { font-size: 0.9em; }
 ', $dependencies);
 
 // Writing an in-line script, style without tag wrapper.
 $theme->asset()->writeContent('custom-inline-script', '
-    <script>
-        $(function() {
-            console.log("Running");
-        });
-    </script>
+	<script>
+		$(function() {
+			console.log("Running");
+		});
+	</script>
 ', $dependencies);
 ~~~
 
@@ -349,8 +349,8 @@ Cook your assets.
 ~~~php
 Theme::asset()->cook('backbone', function($asset)
 {
-    $asset->add('backbone', '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js');
-    $asset->add('underscorejs', '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js');
+	$asset->add('backbone', '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js');
+	$asset->add('underscorejs', '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js');
 });
 ~~~
 
@@ -359,22 +359,22 @@ You can prepare on a global in package config.
 ~~~php
 // Location: config/theme/config.php
 ....
-    'events' => array(
+	'events' => array(
 
-        ....
+		....
 
-        // This event will fire as a global you can add any assets you want here.
-        'asset' => function($asset)
-        {
-            // Preparing asset you need to serve after.
-            $asset->cook('backbone', function($asset)
-            {
-                $asset->add('backbone', '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js');
-                $asset->add('underscorejs', '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js');
-            });
-        }
+		// This event will fire as a global you can add any assets you want here.
+		'asset' => function($asset)
+		{
+			// Preparing asset you need to serve after.
+			$asset->cook('backbone', function($asset)
+			{
+				$asset->add('backbone', '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js');
+				$asset->add('underscorejs', '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js');
+			});
+		}
 
-    )
+	)
 ....
 ~~~
 
@@ -388,13 +388,13 @@ Then you can get output:
 ~~~php
 ---
 <head>
-    @styles()
-    @styles('YOUR_CONTAINER')
+	@styles()
+	@styles('YOUR_CONTAINER')
 </head>
 <body>
 	---
 	@scripts()
-    @scripts('YOUR_CONTAINER')
+	@scripts('YOUR_CONTAINER')
 </body>
 ---
 ~~~
@@ -425,13 +425,13 @@ Theme::watchPartial('header', ['title' => 'Header']);
 ~~~php
 $theme->partialComposer('header', function($view)
 {
-    $view->with('key', 'value');
+	$view->with('key', 'value');
 });
 
 // Working with partialWithLayout.
 $theme->partialComposer('header', function($view)
 {
-    $view->with('key', 'value');
+	$view->with('key', 'value');
 }, 'layout-name');
 ~~~
 
@@ -493,12 +493,12 @@ Theme::place('foo', 'default-value-if-it-does-not-exist');
 It's the same as:
 ~~~php
 @if(Theme::has('title'))
-    {{ Theme::place('title') }}
+	{{ Theme::place('title') }}
 @endif
 ~~~
 ~~~php
 @if(Theme::hasTitle())
-    {{ Theme::getTitle() }}
+	{{ Theme::getTitle() }}
 @endif
 ~~~
 
@@ -522,7 +522,7 @@ Sometimes you don't need to execute heavy processing, so you can prepare and use
 ~~~php
 $theme->bind('something', function()
 {
-    return 'This is bound parameter.';
+	return 'This is bound parameter.';
 });
 ~~~
 
@@ -541,16 +541,13 @@ $theme->breadcrumb()->add('label', 'http://...')->add('label2', 'http:...');
 
 // or
 
-$theme->breadcrumb()->add(array(
-    array(
-        'label' => 'label1',
-        'url'   => 'http://...'
-    ),
-    array(
-        'label' => 'label2',
-        'url'   => 'http://...'
-    )
-));
+$theme->breadcrumb()->add([[
+							  'label' => 'label1',
+							  'url'   => 'http://...'
+						  ],[
+							  'label' => 'label2',
+							  'url'   => 'http://...'
+						  ]]);
 ~~~
 
 To render breadcrumbs.
@@ -567,15 +564,15 @@ You can set up breadcrumbs template anywhere you want by using a blade template.
 
 ~~~php
 $theme->breadcrumb()->setTemplate('
-    <ul class="breadcrumb">
-      @foreach ($crumbs as $i => $crumb)
-          @if ($i != (count($crumbs) - 1))
-              <li><a href="{{ $crumb["url"] }}">{{ $crumb["label"] }}</a><span class="divider">/</span></li>
-          @else
-              <li class="active">{{ $crumb["label"] }}</li>
-          @endif
-      @endforeach
-    </ul>
+	<ul class="breadcrumb">
+	  @foreach ($crumbs as $i => $crumb)
+		  @if ($i != (count($crumbs) - 1))
+			  <li><a href="{{ $crumb["url"] }}">{{ $crumb["label"] }}</a><span class="divider">/</span></li>
+		  @else
+			  <li class="active">{{ $crumb["label"] }}</li>
+		  @endif
+	  @endforeach
+	</ul>
 ');
 ~~~
 
@@ -614,23 +611,23 @@ use App\Http\Controllers\Controller;
 
 class BaseController extends Controller {
 
-    /**
-     * Theme instance.
-     *
-     * @var \Teepluss\Theme\Theme
-     */
-    protected $theme;
+	/**
+	 * Theme instance.
+	 *
+	 * @var \Teepluss\Theme\Theme
+	 */
+	protected $theme;
 
-    /**
-     * Construct
-     *
-     * @return void
-     */
-    public function __construct(Theme $theme)
-    {
-        // Using theme as a global.
-        $this->theme = $theme->uses('default')->layout('ipad');
-    }
+	/**
+	 * Construct
+	 *
+	 * @return void
+	 */
+	public function __construct(Theme $theme)
+	{
+		// Using theme as a global.
+		$this->theme = $theme->uses('default')->layout('ipad');
+	}
 
 }
 ~~~
@@ -639,12 +636,12 @@ To override theme or layout.
 ~~~php
 public function getIndex()
 {
-    $this->theme->uses('newone');
+	$this->theme->uses('newone');
 
-    // or just override layout
-    $this->theme->layout('desktop');
+	// or just override layout
+	$this->theme->layout('desktop');
 
-    $this->theme->of('somewhere.index')->render();
+	$this->theme->of('somewhere.index')->render();
 }
 ~~~
 
@@ -669,7 +666,7 @@ Command | Description
 `artisan theme:create name` | Generate theme structure
 `artisan theme:destroy name` | Remove theme exsisting
 `artisan theme:list` | Show a list of all themes.
-`artisan theme:widget name` | Generate widget structure
+`artisan theme:widget demo default` | Generate widget structure
 
 ##### Blade Directives:
 Blade | Description 

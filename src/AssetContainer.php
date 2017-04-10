@@ -491,6 +491,11 @@ class AssetContainer {
      */
     public function html($group, $source, $attributes)
     {
+        $result = substr($source, 0, 7);
+        if($result=='/public') $source = substr($source, 7);
+
+        $source = url($source);
+        
         switch ($group)
         {
             case 'script' :

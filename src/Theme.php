@@ -176,15 +176,15 @@ class Theme implements ThemeContract
 
         $this->breadcrumb = $breadcrumb;
 
-        // // Default theme.
-        // $this->theme  = $this->getConfig('themeDefault');
+        //$this->theme = $this->getConfig('themeDefault');
+        $this->theme($this->getConfig('themeDefault'));
 
-        // // Default layout.
-        // $this->layout = $this->getConfig('layoutDefault');
+        //$this->layout = $this->getConfig('layoutDefault');
+        $this->layout($this->getConfig('layoutDefault'));
 
         $this->compilers['blade'] = new BladeCompiler($files, 'theme');
 
-        $this->themesPath = app('path.public').'/'.$this->path("");
+        $this->themesPath = base_path($this->path(""));
 
     }
 
@@ -216,8 +216,6 @@ class Theme implements ThemeContract
     public function all()
     {
         $themes = [];
-
-        //$path = app('path.public').'/'.$this->path("");
 
         if ($this->files->exists($path)) {
             $scannedThemes = $this->files->directories($path);
@@ -275,7 +273,7 @@ class Theme implements ThemeContract
      */
     public function exists($theme)
     {
-        $path = app('path.public').'/'.$this->path($theme).'/';
+        $path = base_path($this->path($theme)).'/';
 
         return is_dir($path);
     }
@@ -325,7 +323,7 @@ class Theme implements ThemeContract
 
         $config = $this->getConfig();
 
-        $link = preg_replace("#(public/{$config['themeDir']}/)[^/]+#", "$1{$theme}", $path);
+        $link = preg_replace("#({$config['themeDir']}/)[^/]+#", "$1{$theme}", $path);
 
         extract($this->arguments);
         extract($this->view->getShared());
@@ -342,7 +340,7 @@ class Theme implements ThemeContract
     public function getConfig($key = null)
     {
         // Main package config.
-        if (! $this->themeConfig) {
+        if (!$this->themeConfig) {
             $this->themeConfig = $this->config->get('theme');
         }
 
@@ -353,7 +351,7 @@ class Theme implements ThemeContract
 
             try {
                 // Require public theme config.
-                $minorConfigPath = public_path($this->themeConfig['themeDir'].'/'.$this->theme.'/config.php');
+                $minorConfigPath = base_path($this->themeConfig['themeDir'].'/'.$this->theme.'/config.php');
 
                 $this->themeConfig['themes'][$this->theme] = $this->files->getRequire($minorConfigPath);
             } catch (\Illuminate\Filesystem\FileNotFoundException $e) {
@@ -408,7 +406,7 @@ class Theme implements ThemeContract
     protected function addPathLocation($location)
     {
         // First path is in the selected theme.
-        $hints[] = public_path($location);
+        $hints[] = base_path($location);
 
         // This is nice feature to use inherit from another.
         if ($this->getConfig('inherit')) {
@@ -416,7 +414,7 @@ class Theme implements ThemeContract
             $inherit = $this->getConfig('inherit');
 
             // Inherit theme path.
-            $inheritPath = public_path($this->path($inherit));
+            $inheritPath = base_path($this->path($inherit));
 
             if ($this->files->isDirectory($inheritPath)) {
                 array_push($hints, $inheritPath);
@@ -458,7 +456,7 @@ class Theme implements ThemeContract
         }
 
         // Is theme ready?
-        if (! $this->exists($theme)) {
+        if (!$this->exists($theme)) {
             throw new UnknownThemeException("Theme [$theme] not found.");
         }
 
@@ -530,7 +528,7 @@ class Theme implements ThemeContract
      */
     public function getThemePath()
     {
-        return app('path.public').'/'.$this->path($this->theme);
+        return base_path($this->path($this->theme)).'/';
     }
 
 
@@ -1191,7 +1189,7 @@ class Theme implements ThemeContract
 
         $path = $this->getThemeNamespace('layouts.'.$this->layout);
 
-        if (! $this->view->exists($path)) {
+        if (!$this->view->exists($path)) {
             throw new UnknownLayoutFileException("Layout [$this->layout] not found.");
         }
 
