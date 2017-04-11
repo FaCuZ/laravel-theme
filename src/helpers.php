@@ -51,8 +51,8 @@ if (!function_exists('meta_init')){
 	 * @return string
 	 */
 	function meta_init() {
-		return `<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width, initial-scale=1">`;
+		return '<meta charset="utf-8">'.
+		'<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">'.
+		'<meta name="viewport" content="width=device-width, initial-scale=1">';
 	}
 }

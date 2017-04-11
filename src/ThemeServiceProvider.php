@@ -61,15 +61,15 @@ class ThemeServiceProvider extends ServiceProvider {
 						'theme.destroy'
 						);
 
-		$this->addToBlade(['get', 'echo Theme::get(%s);']);
-		$this->addToBlade(['getIfHas', 'echo Theme::has(%1$s) ? Theme::get(%1$s) : ""']);
+		$this->addToBlade(['get', 'Theme::get(%s);']);
+		$this->addToBlade(['getIfHas', 'Theme::has(%1$s) ? Theme::get(%1$s) : ""']);
 
-		$this->addToBlade(['partial', 'echo Theme::partial(%s);']);
-		$this->addToBlade(['section', 'echo Theme::partial("sections.".%s);']);
-		$this->addToBlade(['content', null, 'echo Theme::content();']);
+		$this->addToBlade(['partial', 'Theme::partial(%s);']);
+		$this->addToBlade(['sections', 'Theme::partial("sections.".%s);']);
+		$this->addToBlade(['content', null, 'Theme::content();']);
 
-		$this->addToBlade(['styles', 'echo Theme::asset()->container(%s)->styles();', 'echo Theme::asset()->styles();']);
-		$this->addToBlade(['scripts', 'echo Theme::asset()->container(%s)->scripts();', 'echo Theme::asset()->scripts();']);
+		$this->addToBlade(['styles', 'Theme::asset()->container(%s)->styles();', 'Theme::asset()->styles();']);
+		$this->addToBlade(['scripts', 'Theme::asset()->container(%s)->scripts();', 'Theme::asset()->scripts();']);
 
 	}
 
@@ -79,10 +79,10 @@ class ThemeServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	protected function addToBlade($array){
-		Blade::directive($array[0], function ($data) use ($array) {			
-			if(!$data) return '<?php '.$array[2].' ?>';
+		Blade::directive($array[0], function ($data) use ($array) {	
+			if(!$data) return '<?php echo '.$array[2].' ?>';
 
-			return sprintf('<?php '.$array[1].' ?>',
+			return sprintf('<?php echo '.$array[1].' ?>',
 				null !== $data ? $data : "get_defined_vars()['__data']"
 			);
 		});  

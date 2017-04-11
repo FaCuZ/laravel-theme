@@ -120,6 +120,14 @@ class Theme implements ThemeContract
 
 
     /**
+     * Injected arguments.
+     *
+     * @var array
+     */
+    protected $argInjected = array();
+
+
+    /**
      * Data bindings.
      *
      * @var array
@@ -187,6 +195,48 @@ class Theme implements ThemeContract
         $this->themesPath = base_path($this->path(""));
 
     }
+
+
+    /**
+     * Compile the inject statements into valid PHP.
+     *
+     * @param  string  $variable
+     * @param  string  $service
+     * @return string
+     */
+    public function inject($variable, $service)
+    {
+        $this->argInjected[$variable] = app($service);
+        /*
+        var_dump("<?php \${$variable} = app('{$service}'); ?>");
+        */
+    }
+
+
+    /**
+     * Get a view
+     *
+     * @return View
+     */
+    public function view($view, $args = []){
+        if(is_array($view)) {
+            if(isset($view['theme'])) $this->theme($view['theme']);
+            if(isset($view['layout'])) $this->layout($view['layout']);
+            if(isset($view['cookie'])) $this->withCookie($view['cookie']);
+            $statusCode = (isset($view['statusCode'])) ? $view['statusCode'] : 200;
+                        
+            if(empty($args)) 
+                if(isset($view['args'])) $args = $view['args'];
+
+            
+            $view = $view['view'];
+        }
+
+        $this->uses($this->theme)->layout($this->layout);
+
+        return $this->watch($view, $args)->render();
+    }
+
 
     /**
      * Get or set data on manifest.

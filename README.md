@@ -83,6 +83,24 @@ php artisan theme:create default
 ~~~
 > If you change the facade name you can add an option --facade="Alias".
 
+
+This will create the following directory structure:
+
+```
+├── public/
+    └── themes/
+	└── default/
+		├── assets
+        	|	├── css/
+		|	├── img/
+            	|	└── js/
+            	├── layouts/
+            	├── partials/
+           	|	└── sections/
+            	├── views/
+	        └── widgets/
+```
+
 To delete an existing theme, use the command:
 
 ~~~
@@ -173,6 +191,8 @@ The config is convenient for setting up basic CSS/JS, partial composer, breadcru
 
 ## Basic usage
 
+To display a view from the controller:
+
 ~~~php
 namespace App\Http\Controllers;
 
@@ -182,45 +202,40 @@ class HomeController extends Controller {
 
 	public function getIndex()
 	{
-		$theme = Theme::uses('default')->layout('mobile');
-
-		$view = array(
-			'name' => 'Teepluss'
-		);
-
-		// home.index will look up the path 'resources/views/home/index.php'
-		return $theme->of('home.index', $view)->render();
-
-		// Specific status code with render.
-		return $theme->of('home.index', $view)->render(200);
-
-		// home.index will look up the path 'resources/views/mobile/home/index.php'
-		return $theme->ofWithLayout('home.index', $view)->render();
-
-		// home.index will look up the path 'public/themes/default/views/home/index.php'
-		return $theme->scope('home.index', $view)->render();
-
-		// home.index will look up the path 'public/themes/default/views/mobile/home/index.php'
-		return $theme->scopeWithLayout('home.index', $view)->render();
-
-		// Looking for a custom path.
-		return $theme->load('app.somewhere.viewfile', $view)->render();
-
-		// Working with cookie.
-		$cookie = Cookie::make('name', 'Tee');
-		return $theme->of('home.index', $view)->withCookie($cookie)->render();
+		return Theme::view('index');
 	}
-
+	...
 }
 ~~~
-> Get only content "$theme->of('home.index')->content();".
+>This will use the theme and layout set by default
 
-Finding from both theme's view and application's view.
+		
+You can add data or define the theme and layout:
+
 ~~~php
-$theme = Theme::uses('default')->layout('default');
+...		
+Theme::uses('themename');
+        
+$data['info'] = 'Hello World'; 
 
-return $theme->watch('home.index')->render();
+return Theme::view('index', $data);
+...
 ~~~
+
+Or you can do:
+~~~php
+$cookie = Cookie::make('name', 'Tee');
+
+return Theme::view([
+		    'view' => 'index',
+		    'theme' => 'default',
+		    'layout' => 'layout',
+		    'statusCode' => 200,
+		    'cookie'  => $cookie,
+		    'args' => $data
+		   ]);
+~~~
+>All values except `'view'` are optional
 
 To check whether a theme exists.
 
@@ -228,6 +243,63 @@ To check whether a theme exists.
 Theme::exists('themename');
 ~~~
 > Returns boolean.
+
+#### Other ways:
+~~~php
+$theme = Theme::uses('default')->layout('mobile');
+
+$data = [
+	'info' => 'Hello World'
+];
+~~~
+
+~~~php
+// It will look up the path 'resources/views/home/index.php':
+return $theme->of('home.index', $data)->render();
+~~~
+
+~~~php
+// Specific status code with render:
+return $theme->of('home.index', $data)->render(200);
+~~~
+
+~~~php
+// It will look up the path 'resources/views/mobile/home/index.php':
+return $theme->ofWithLayout('home.index', $data)->render();
+~~~
+
+~~~php
+// It will look up the path 'public/themes/default/views/home/index.php':
+return $theme->scope('home.index', $data)->render();
+~~~
+
+~~~php
+// It will look up the path 'public/themes/default/views/mobile/home/index.php':
+return $theme->scopeWithLayout('home.index', $data)->render();
+~~~
+
+~~~php
+// Looking for a custom path:
+return $theme->load('app.somewhere.viewfile', $data)->render();
+~~~
+
+~~~php
+// Working with cookie:
+$cookie = Cookie::make('name', 'Tee');
+return $theme->of('home.index', $data)->withCookie($cookie)->render();
+~~~
+
+~~~php
+// Get only content:
+return $theme->of('home.index')->content();
+~~~
+
+Finding from both theme's view and application's view.
+~~~php
+$theme = Theme::uses('default')->layout('default');
+
+return $theme->watch('home.index')->render();
+~~~
 
 To find the location of a view.
 
@@ -247,7 +319,7 @@ echo $which; // ./public/themes/name/views/home/index.blade.php
 return $theme->string('<h1>{{ $name }}</h1>', array('name' => 'Teepluss'), 'blade')->render();
 ~~~
 
-#### Compile string:
+Compile string:
 
 ~~~php
 $template = '<h1>Name: {{ $name }}</h1><p>{{ Theme::widget("WidgetIntro", array("userId" => 9999, "title" => "Demo Widget"))->render() }}</p>';
@@ -261,17 +333,12 @@ This is a nice feature when you have multiple files that have the same name, but
 
 ~~~php
 // Theme A : /public/themes/a/views/welcome.blade.php
-
 // Theme B : /public/themes/b/views/welcome.blade.php
 
 // File welcome.blade.php at Theme B is the same as Theme A, so you can do link below:
 
-// ................
-
+Theme::symlink('a'); 
 // Location: public/themes/b/views/welcome.blade.php
-Theme::symlink('a');
-
-// That's it!
 ~~~
 
 ## Basic usage of assets
@@ -299,7 +366,6 @@ $theme->asset()->container('footer')->usePath()->add('custom', 'js/custom.js', a
 Writing in-line style or script.
 
 ~~~php
-
 // Dependency with.
 $dependencies = array();
 
@@ -389,12 +455,12 @@ Then you can get output:
 ---
 <head>
 	@styles()
-	@styles('YOUR_CONTAINER')
+	@styles('your-container')
 </head>
 <body>
 	---
 	@scripts()
-	@scripts('YOUR_CONTAINER')
+	@scripts('your-container')
 </body>
 ---
 ~~~
@@ -439,7 +505,7 @@ $theme->partialComposer('header', function($view)
 
 The `@section` blade directive simplify the access to `/partials/sections/` path:
 ~~~php
-@section('main');
+@sections('main');
 ~~~
 
 It's the same as:
@@ -471,6 +537,8 @@ Render in your blade layout or view:
 ~~~php
 @get('foo')
 
+@get('foo', 'Default msj')
+
 Theme::getAnything();
 
 Theme::getFoo();
@@ -483,7 +551,7 @@ or use place:
 ~~~php
 Theme::place('anything');
 
-Theme::place('foo', 'default-value-if-it-does-not-exist');
+Theme::place('foo', 'Default msj');
 ~~~
 
 ##### Check if the place exists or not:
@@ -542,12 +610,12 @@ $theme->breadcrumb()->add('label', 'http://...')->add('label2', 'http:...');
 // or
 
 $theme->breadcrumb()->add([[
-							  'label' => 'label1',
-							  'url'   => 'http://...'
-						  ],[
-							  'label' => 'label2',
-							  'url'   => 'http://...'
-						  ]]);
+			 'label' => 'label1',
+			 'url'   => 'http://...'
+			],[
+			 'label' => 'label2',
+			 'url'   => 'http://...'
+			]]);
 ~~~
 
 To render breadcrumbs.
