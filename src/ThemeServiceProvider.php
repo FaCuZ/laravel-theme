@@ -51,6 +51,7 @@ class ThemeServiceProvider extends ServiceProvider {
 		$this->registerThemeGenerator();
 		$this->registerWidgetGenerator();
 		$this->registerThemeList();
+		$this->registerThemeDuplicate();
 		$this->registerThemeDestroy();
 
 		// Assign commands.
@@ -58,6 +59,7 @@ class ThemeServiceProvider extends ServiceProvider {
 						'theme.create',
 						'theme.widget',
 						'theme.list',
+						'theme.duplicate',
 						'theme.destroy'
 						);
 
@@ -169,6 +171,19 @@ class ThemeServiceProvider extends ServiceProvider {
 		$this->app->singleton('theme.create', function($app)
 		{
 			return new Commands\ThemeGeneratorCommand($app['config'], $app['files']);
+		});
+	}
+
+	/**
+	 * Register duplicate of theme.
+	 *
+	 * @return void
+	 */
+	public function registerThemeDuplicate()
+	{
+		$this->app->singleton('theme.duplicate', function($app)
+		{
+			return new Commands\ThemeDuplicateCommand($app['config'], $app['files']);
 		});
 	}
 

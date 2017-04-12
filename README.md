@@ -256,15 +256,18 @@ echo $which; // ./public/themes/name/views/home/index.blade.php
 #### Render from string:
 
 ~~~php
-return $theme->string('<h1>{{ $name }}</h1>', array('name' => 'Teepluss'), 'blade')->render();
+return $theme->string('<h1>{{ $name }}</h1>', ['name' => 'Teepluss'], 'blade')->render();
 ~~~
 
 Compile string:
 
 ~~~php
-$template = '<h1>Name: {{ $name }}</h1><p>{{ Theme::widget("WidgetIntro", array("userId" => 9999, "title" => "Demo Widget"))->render() }}</p>';
+$template = `<h1>Name: {{ $name }}</h1>
+		     <p>
+		      {{ Theme::widget("WidgetIntro", ["title" => "Demo Widget"])->render() }}
+		     </p>`;
 
-echo Theme::blader($template, array('name' => 'Teepluss'));
+echo Theme::blader($template, ['name' => 'Teepluss']);
 ~~~
 
 #### Symlink from another view
@@ -303,7 +306,7 @@ The config is convenient for setting up basic CSS/JS, partial composer, breadcru
 		$theme->setKeywords('Example, Web');
 	
 		// Breadcrumb template.
-		$theme->breadcrumb()->setTemplate('        
+		$theme->breadcrumb()->setTemplate(`        
 			 <ul class="breadcrumb">
 			 @foreach($crumbs as $i => $crumb)
 				 @if($i != (count($crumbs) - 1))
@@ -316,7 +319,7 @@ The config is convenient for setting up basic CSS/JS, partial composer, breadcru
 				 @endif
 			 @endforeach
 			 </ul>             
-		 ');
+		 `);
          
 	 },
 
