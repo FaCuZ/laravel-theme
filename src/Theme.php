@@ -935,18 +935,6 @@ class Theme implements ThemeContract
     }
 
     /**
-     * Render a region.
-     *
-     * @param  string $region
-     * @param  mixed  $default
-     * @return string
-     */
-    public function place($region, $default = null)
-    {
-        return $this->get($region, $default);
-    }
-
-    /**
      * Place content in sub-view.
      *
      * @return string

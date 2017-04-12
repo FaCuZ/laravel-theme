@@ -61,6 +61,9 @@ class ThemeServiceProvider extends ServiceProvider {
 						'theme.destroy'
 						);
 
+		$this->addToBlade(['dd', 'dd(%s);']);
+		$this->addToBlade(['d', 'dump(%s);']);
+
 		$this->addToBlade(['get', 'Theme::get(%s);']);
 		$this->addToBlade(['getIfHas', 'Theme::has(%1$s) ? Theme::get(%1$s) : ""']);
 

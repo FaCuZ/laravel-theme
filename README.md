@@ -20,9 +20,8 @@ Theme has many features to help you get started with Laravel
 
 - [Installation](#installation)
 - [Create new theme](#create-new-theme)
-- [Configuration](#configuration)
 - [Basic usage](#basic-usage)
-- [Symlink from another view](#symlink-from-another-view)
+- [Configuration](#configuration)
 - [Basic usage of assets](#basic-usage-of-assets)
 - [Partials](#partials)
 - [Magic methods](#magic-methods)
@@ -37,7 +36,7 @@ Theme has many features to help you get started with Laravel
 
 To get the latest version of laravel-themes simply require it in your `composer.json` file.
 
-~~~
+~~~json
 "facuz/laravel-themes": "^3.0"
 ~~~
 
@@ -45,7 +44,7 @@ You'll then need to run `composer install` to download it and have the autoloade
 
 Once Theme is installed you need to register the service provider with the application. Open up `config/app.php` and find the `providers` key.
 
-~~~
+~~~php
 'providers' => [
 
 	Facuz\Theme\ThemeServiceProvider::class,
@@ -55,7 +54,7 @@ Once Theme is installed you need to register the service provider with the appli
 
 Theme also ships with a facade which provides the static syntax for creating collections. You can register the facade in the `aliases` key of your `config/app.php` file.
 
-~~~
+~~~php
 'aliases' => [
 
 	'Theme' => Facuz\Theme\Facades\Theme::class,
@@ -120,72 +119,6 @@ Create from the applicaton without CLI.
 Artisan::call('theme:create', ['name' => 'foo']);
 ~~~
 
-## Configuration
-
-After the config is published, you will see a global config file `/config/theme.php`, all the configuration can be replaced by a config file inside a theme: `/public/themes/[theme]/config.php`
-
-The config is convenient for setting up basic CSS/JS, partial composer, breadcrumb template and also metas.
-
-~~~php
-'events' => [
-
-	/* 
-	 * Before event inherit from package config and the theme that call
-	 * before, you can use this event to set meta, breadcrumb
-	 * template or anything you want inheriting.
-	 */
-	'before' => function($theme)
-	{
-		// You can remove this lines anytime.
-		$theme->setTitle('Title Example');
-		$theme->setAuthor('John Doe');
-		$theme->setKeywords('Example, Web');
-	
-		// Breadcrumb template.
-		$theme->breadcrumb()->setTemplate('        
-			 <ul class="breadcrumb">
-			 @foreach ($crumbs as $i => $crumb)
-				 @if ($i != (count($crumbs) - 1))
-					<li><a href="{{ $crumb["url"] }}">{{ $crumb["label"] }}</a><span class="divider">/</span></li>
-				 @else
-					<li class="active">{{ $crumb["label"] }}</li>
-				 @endif
-			 @endforeach
-			 </ul>             
-		 ');
-         
-	 },
-
-	/*
-	 * Listen on event before render a theme, this event should
-	 * call to assign some assets, breadcrumb template.
-	 */
-	'beforeRenderTheme' => function($theme)
-	{
-		// You may use this event to set up your assets.
-		$theme->asset()->usePath()->add('core', 'core.js');
-		$theme->asset()->add('jquery', 'vendor/jquery/jquery.min.js');
-		$theme->asset()->add('jquery-ui', 'vendor/jqueryui/jquery-ui.min.js', array('jquery'));
-
-		$theme->partialComposer('header', function($view){
-			$view->with('auth', Auth::user());
-		});
-
-	},
-
-	/*
-	 * Listen on event before render a layout, this should 
-	 * call to assign style, script for a layout.
-	 */
-	'beforeRenderLayout' => [
-
-		'default' => function($theme){
-			$theme->asset()->usePath()->add('ipad', 'css/layouts/ipad.css');
-		}
-	]
-];
-~~~
-
 ## Basic usage
 
 To display a view from the controller:
@@ -204,7 +137,7 @@ class HomeController extends Controller {
 	...
 }
 ~~~
->This will use the theme and layout set by default
+>This will use the theme and layout set by default on `.env`
 
 		
 You can add data or define the theme and layout:
@@ -243,12 +176,12 @@ Theme::exists('themename');
 You can access or modify the manifest with the information of the theme:
 
 ~~~php
+// Get all: (array)
+Theme::info(); 
 // Get:
 Theme::info("property"); 
 // Set:
 Theme::info("property", "new data"); 
-// Get JSON:
-Theme::info(); 
 ~~~
 
 #### Other ways:
@@ -348,6 +281,75 @@ Theme::symlink('a');
 // Location: public/themes/b/views/welcome.blade.php
 ~~~
 
+## Configuration
+
+After the config is published, you will see a global config file `/config/theme.php`, all the configuration can be replaced by a config file inside a theme: `/public/themes/[theme]/config.php`
+
+The config is convenient for setting up basic CSS/JS, partial composer, breadcrumb template and also metas.
+
+~~~php
+'events' => [
+
+	/* 
+	 * Before event inherit from package config and the theme that call
+	 * before, you can use this event to set meta, breadcrumb
+	 * template or anything you want inheriting.
+	 */
+	'before' => function($theme)
+	{
+		// You can remove this lines anytime.
+		$theme->setTitle('Title Example');
+		$theme->setAuthor('John Doe');
+		$theme->setKeywords('Example, Web');
+	
+		// Breadcrumb template.
+		$theme->breadcrumb()->setTemplate('        
+			 <ul class="breadcrumb">
+			 @foreach($crumbs as $i => $crumb)
+				 @if($i != (count($crumbs) - 1))
+					<li>
+                    	<a href="{{ $crumb["url"] }}">{{ $crumb["label"] }}</a>
+                        <span class="divider">/</span>
+					</li>
+				 @else
+					<li class="active">{{ $crumb["label"] }}</li>
+				 @endif
+			 @endforeach
+			 </ul>             
+		 ');
+         
+	 },
+
+	/*
+	 * Listen on event before render a theme, this event should
+	 * call to assign some assets, breadcrumb template.
+	 */
+	'beforeRenderTheme' => function($theme)
+	{
+		// You may use this event to set up your assets.
+		$theme->asset()->usePath()->add('core', 'core.js');
+		$theme->asset()->add('jquery', 'vendor/jquery/jquery.min.js');
+		$theme->asset()->add('jquery-ui', 'vendor/jqueryui/jquery-ui.min.js', ['jquery']);
+
+		$theme->partialComposer('header', function($view){
+			$view->with('auth', Auth::user());
+		});
+
+	},
+
+	/*
+	 * Listen on event before render a layout, this should 
+	 * call to assign style, script for a layout.
+	 */
+	'beforeRenderLayout' => [
+
+		'default' => function($theme){
+			$theme->asset()->usePath()->add('ipad', 'css/layouts/ipad.css');
+		}
+	]
+];
+~~~
+
 ## Basic usage of assets
 
 Add assets in your route.
@@ -380,13 +382,10 @@ $dependencies = array();
 $theme->asset()->writeScript('inline-script', '
 	$(function() {
 		console.log("Running");
-	})
-', $dependencies);
+	})', $dependencies);
 
 // Writing an in-line style.
-$theme->asset()->writeStyle('inline-style', '
-	h1 { font-size: 0.9em; }
-', $dependencies);
+$theme->asset()->writeStyle('inline-style', 'h1{ font-size: 0.9em; }', $dependencies);
 
 // Writing an in-line script, style without tag wrapper.
 $theme->asset()->writeContent('custom-inline-script', '
@@ -394,8 +393,7 @@ $theme->asset()->writeContent('custom-inline-script', '
 		$(function() {
 			console.log("Running");
 		});
-	</script>
-', $dependencies);
+	</script>', $dependencies);
 ~~~
 
 Render styles and scripts in your blade layout.
@@ -407,11 +405,20 @@ Render styles and scripts in your blade layout.
 // With "footer" container
 @scripts('footer')
 ~~~
+> Scripts and Style can be used with or without container
+
+or
+
+~~~php
+{!! Theme::asset()->styles() !!}
+
+{!! Theme::asset()->container('footer')->scripts() !!}
+~~~
 
 Direct path to theme asset.
 
 ~~~php
-echo Theme::asset()->url('img/image.png');
+{!! Theme::asset()->url('img/image.png') !!}
 ~~~
 
 #### Preparing group of assets:
@@ -745,6 +752,8 @@ Blade | Description
 `@content()` | Load the content of the selected view
 `@styles('optional')` | Render styles declared in theme config.
 `@scripts('optional')` | Render scripts declared in theme config.
+`@dd('value')` | Dump and Die. 
+`@d('value')` | Only dump
 
 ##### Helpers:
 Helper | Description 
