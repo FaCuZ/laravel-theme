@@ -67,11 +67,7 @@ class Manifest
 
 			return json_decode($contents, true);
 		} else {
-			$message = "The theme must have a valid theme.json manifest file.";
-			
-			abort(500, $message);
-			//return null;
-			//throw new FileMissingException($message);
+			throw new UnknownFileException("The theme must have a valid theme.json manifest file.");
 		}
 	}
 
@@ -84,6 +80,7 @@ class Manifest
 	protected function setJsonContents(array $content)
 	{
 		$content = json_encode($content, JSON_PRETTY_PRINT);
+
 
 		return $this->files->put($this->getJsonPath(), $content);
 	}

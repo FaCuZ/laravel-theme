@@ -119,7 +119,7 @@ class ThemeGeneratorCommand extends Command {
 			$path = $to.$file;
 
 			if (!$this->files->exists($this->getPath($path))){
-				$content = $this->getPath($path);
+				$file_path = $this->getPath($path);
 
 				$facade = $this->option('facade');
 				
@@ -127,7 +127,12 @@ class ThemeGeneratorCommand extends Command {
 					$template = preg_replace('/Theme(\.|::)/', $facade.'$1', $template);
 				}
 
-				$this->files->put($content, $template);
+				$this->files->put($file_path, $template);
+
+				if(substr($file_path, -10) == 'theme.json'){
+					$this->files->chmod($file_path, 0666);	
+
+				} 
 			}
 		}
 	}

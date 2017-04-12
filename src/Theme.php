@@ -243,18 +243,19 @@ class Theme implements ThemeContract
      *
      * @return Collection
      */
-    public function manifest($property = null, $value = null) {
+    public function info($property = null, $value = null) {
+        $info = $this->manifest;
 
-        $this->manifest->setThemePath($this->getThemePath());
+        $info->setThemePath($this->getThemePath());
 
         if($value && $property){
-            $this->manifest->setProperty($property, $value);
+            $info->setProperty($property, $value);
             return $value;
         } else {
             if($property){
-                return $this->manifest->getProperty($property);
+                return $info->getProperty($property);
             }
-            return null;
+            return $info->getJsonContents();
         }
     }
 

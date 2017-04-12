@@ -12,6 +12,7 @@ This package is based on [teepluss\theme](https://github.com/teepluss/laravel-th
 >- Simplified configuration.
 >- More commands and helper functions.
 >- Better README file.
+>- Manifest file
 
 ## Usage
 
@@ -126,7 +127,7 @@ After the config is published, you will see a global config file `/config/theme.
 The config is convenient for setting up basic CSS/JS, partial composer, breadcrumb template and also metas.
 
 ~~~php
-'events' => array(
+'events' => [
 
 	/* 
 	 * Before event inherit from package config and the theme that call
@@ -139,9 +140,8 @@ The config is convenient for setting up basic CSS/JS, partial composer, breadcru
 		$theme->setTitle('Title Example');
 		$theme->setAuthor('John Doe');
 		$theme->setKeywords('Example, Web');
-
-		/*
-		Breadcrumb template.
+	
+		// Breadcrumb template.
 		$theme->breadcrumb()->setTemplate('        
 			 <ul class="breadcrumb">
 			 @foreach ($crumbs as $i => $crumb)
@@ -153,7 +153,7 @@ The config is convenient for setting up basic CSS/JS, partial composer, breadcru
 			 @endforeach
 			 </ul>             
 		 ');
-		 */
+         
 	 },
 
 	/*
@@ -163,7 +163,6 @@ The config is convenient for setting up basic CSS/JS, partial composer, breadcru
 	'beforeRenderTheme' => function($theme)
 	{
 		// You may use this event to set up your assets.
-		/*
 		$theme->asset()->usePath()->add('core', 'core.js');
 		$theme->asset()->add('jquery', 'vendor/jquery/jquery.min.js');
 		$theme->asset()->add('jquery-ui', 'vendor/jqueryui/jquery-ui.min.js', array('jquery'));
@@ -171,22 +170,20 @@ The config is convenient for setting up basic CSS/JS, partial composer, breadcru
 		$theme->partialComposer('header', function($view){
 			$view->with('auth', Auth::user());
 		});
-		*/
+
 	},
 
 	/*
 	 * Listen on event before render a layout, this should 
 	 * call to assign style, script for a layout.
 	 */
-	'beforeRenderLayout' => array(
+	'beforeRenderLayout' => [
 
 		'default' => function($theme){
-			// $theme->asset()->usePath()->add('ipad', 'css/layouts/ipad.css');
+			$theme->asset()->usePath()->add('ipad', 'css/layouts/ipad.css');
 		}
-
-		)
-
-	)
+	]
+];
 ~~~
 
 ## Basic usage
@@ -242,7 +239,17 @@ To check whether a theme exists.
 ~~~php
 Theme::exists('themename');
 ~~~
-> Returns boolean.
+
+You can access or modify the manifest with the information of the theme:
+
+~~~php
+// Get:
+Theme::info("property"); 
+// Set:
+Theme::info("property", "new data"); 
+// Get JSON:
+Theme::info(); 
+~~~
 
 #### Other ways:
 ~~~php
@@ -543,15 +550,7 @@ Theme::getAnything();
 
 Theme::getFoo();
 
-Theme::get('foo');
-~~~
-
-or use place:
-
-~~~php
-Theme::place('anything');
-
-Theme::place('foo', 'Default msj');
+Theme::get('foo', 'Default msj);
 ~~~
 
 ##### Check if the place exists or not:
@@ -561,7 +560,7 @@ Theme::place('foo', 'Default msj');
 It's the same as:
 ~~~php
 @if(Theme::has('title'))
-	{{ Theme::place('title') }}
+	{{ Theme::get('title') }}
 @endif
 ~~~
 ~~~php
