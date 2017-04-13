@@ -1,6 +1,7 @@
 <?php namespace Facuz\Theme;
 
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
 class ThemeServiceProvider extends ServiceProvider {
@@ -15,14 +16,17 @@ class ThemeServiceProvider extends ServiceProvider {
 	/**
 	 * Bootstrap the application events.
 	 *
+	 * @param  \Illuminate\Routing\Router $router
 	 * @return void
 	 */
-	public function boot()
+	public function boot(Router $router)
 	{
 		$configPath = __DIR__.'/../config/theme.php';
 
 		// Publish config.
 		$this->publishes([$configPath => config_path('theme.php')], 'config');
+	
+	    $router->aliasMiddleware('theme', Middleware\ThemeLoader::class);
 	}
 
 	/**
@@ -37,24 +41,23 @@ class ThemeServiceProvider extends ServiceProvider {
 		// Merge config to allow user overwrite.
 		$this->mergeConfigFrom($configPath, 'theme');
 
-		// Temp to use in closure.
 		$app = $this->app;
 
-		// Register providers.
+		// Register providers:
 		$this->registerAsset();
 		$this->registerTheme();
 		//$this->registerWidget();
 		$this->registerBreadcrumb();
 		$this->registerManifest();
 
-		// Register commands.
+		// Register commands:
 		$this->registerThemeGenerator();
 		$this->registerWidgetGenerator();
 		$this->registerThemeList();
 		$this->registerThemeDuplicate();
 		$this->registerThemeDestroy();
 
-		// Assign commands.
+		// Assign commands:
 		$this->commands(
 						'theme.create',
 						'theme.widget',
@@ -63,6 +66,7 @@ class ThemeServiceProvider extends ServiceProvider {
 						'theme.destroy'
 						);
 
+		// Register blade directives:
 		$this->addToBlade(['dd', 'dd(%s);']);
 		$this->addToBlade(['d', 'dump(%s);']);
 

@@ -12,7 +12,8 @@ This package is based on [teepluss\theme](https://github.com/teepluss/laravel-th
 >- Simplified configuration.
 >- More commands and helper functions.
 >- Better README file.
->- Manifest file
+>- Manifest file (Get and set theme info)
+>- Middleware to define theme and layout
 
 ## Usage
 
@@ -29,6 +30,8 @@ Theme has many features to help you get started with Laravel
 - [Breadcrumb](#breadcrumb)
 - [Widgets](#widgets)
 - [Using theme global](#using-theme-global)
+- [Middleware](#middleware)
+- [Helpers](#helpers)
 - [Cheatsheet](#cheatsheet)
 
 
@@ -173,7 +176,21 @@ To check whether a theme exists.
 Theme::exists('themename');
 ~~~
 
-You can access or modify the manifest with the information of the theme:
+Each theme must come supplied with a manifest file `theme.json` stored at the root of the theme, which defines supplemental details about the theme. 
+~~~json
+{
+    "slug": "default",
+    "name": "Default",
+    "author": "John Doe",
+    "email": "johndoe@example.com",
+    "description": "This is an example theme.",
+    "web": "www.example.com",
+    "license": "MIT",
+    "version": "1.0"
+}
+~~~
+
+The manifest file can store any property that you'd like. These values can be retrieved and even set through a couple helper methods:
 
 ~~~php
 // Get all: (array)
@@ -184,7 +201,7 @@ Theme::info("property");
 Theme::info("property", "new data"); 
 ~~~
 
-#### Other ways:
+#### Other ways to distray a view:
 ~~~php
 $theme = Theme::uses('default')->layout('mobile');
 
@@ -372,8 +389,7 @@ $theme->asset()->usePath()->add('custom', 'css/custom.css', array('core-style'))
 // This case has dependency with "core-script".
 $theme->asset()->container('footer')->usePath()->add('custom', 'js/custom.js', array('core-script'));
 ~~~
-> You can force use theme to look up existing theme by passing parameter to method:
-> $theme->asset()->usePath('default')
+> You can force use theme to look up existing theme by passing parameter to method: `$theme->asset()->usePath('default')`
 
 Writing in-line style or script.
 
@@ -410,7 +426,7 @@ Render styles and scripts in your blade layout.
 ~~~
 > Scripts and Style can be used with or without container
 
-or
+or a more complex way:
 
 ~~~php
 {!! Theme::asset()->styles() !!}
@@ -721,7 +737,36 @@ public function getIndex()
 	$this->theme->of('somewhere.index')->render();
 }
 ~~~
+## Middleware:
 
+A middleware is included out of the box if you want to define a theme or layout per route. For Laravel 5.4+ the middleware is installed by default.
+
+##### To install it in Laravel before 5.4:
+
+Only register it in `app\Http\Kernel.php`
+~~~php
+protected $routeMiddleware = [
+    ...
+    'setTheme' => \Facuz\Theme\Middleware\ThemeLoader::class,
+];
+~~~
+
+##### Usage:
+You can apply the middleware to a route or route-group with the string `'theme:[theme],[layout]'`
+~~~php
+Route::get('/mid', function () {
+	...
+	return Theme::view('index');
+})->middleware('theme:default,layout');
+~~~
+
+Or using groups:
+
+~~~php
+Route::group(['middleware'=>'theme:default,layout'], function() {
+    ...
+});
+~~~
 
 ## Helpers
 ##### Protect emails:

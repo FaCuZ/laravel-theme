@@ -4,6 +4,7 @@
     "author": "John Doe",
     "email": "johndoe@example.com",
     "description": "This is an example theme.",
-    "web": "http://www.example.com",
+    "web": "www.example.com",
+    "license": "MIT",
     "version": "1.0"
 }
