@@ -36,32 +36,48 @@ return array(
 			$theme->setAuthor('Jonh Doe');
 		},
 
+		'asset' => function($asset)
+		{
+			$asset->themePath()->add([
+										['style', 'css/style.css'],
+										['script', 'js/script.js']
+									 ]);
+
+			// You may use elixir to concat styles and scripts.
+			/*
+			$asset->themePath()->add([
+										['styles', 'dist/css/styles.css'],
+										['scripts', 'dist/js/scripts.js']
+									 ]);
+			*/
+
+			// Or you may use this event to set up your assets.
+			/*
+			$asset->themePath()->add('core', 'core.js');			
+			$asset->add([
+							['jquery', 'vendor/jquery/jquery.min.js'],
+							['jquery-ui', 'vendor/jqueryui/jquery-ui.min.js', ['jquery']]
+						]);
+			*/
+		},
+
+
 		'beforeRenderTheme' => function($theme)
 		{
-			$theme->asset()->usePath()->add('styles', 'css/style.css');
-			$theme->asset()->usePath()->add('scripts', 'js/script.js');
-
-
+			// To render partial composer
 			/*
-			// You may use elixir to concat styles and scripts.
-			$theme->asset()->usePath()->add('styles', 'dist/css/styles.css');
-			$theme->asset()->usePath()->add('scripts', 'dist/js/scripts.js');
+	        $theme->partialComposer('header', function($view){
+	            $view->with('auth', Auth::user());
+	        });
 			*/
 
-
-			/*
-			// Or you may use this event to set up your assets.
-			$theme->asset()->usePath()->add('core', 'core.js');
-			$theme->asset()->add('jquery', 'vendor/jquery/jquery.min.js');
-			$theme->asset()->add('jquery-ui', 'vendor/jqueryui/jquery-ui.min.js', array('jquery'));
-			*/
 		},
 
 		'beforeRenderLayout' => array(
 
-			'default' => function($theme)
+			'mobile' => function($theme)
 			{
-				// $theme->asset()->usePath()->add('ipad', 'css/layouts/ipad.css');
+				// $theme->asset()->themePath()->add('ipad', 'css/layouts/ipad.css');
 			}
 
 		)

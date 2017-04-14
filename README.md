@@ -110,11 +110,18 @@ To delete an existing theme, use the command:
 php artisan theme:destroy default
 ~~~
 
-If you wanna list all installed themes use the command:
+If you want to list all installed themes use the command:
 
 ~~~
 php artisan theme:list
 ~~~
+
+You can duplicate an existing theme:
+~~~
+php artisan theme:duplicate name new-theme
+~~~
+
+
 
 Create from the applicaton without CLI.
 
@@ -337,24 +344,43 @@ The config is convenient for setting up basic CSS/JS, partial composer, breadcru
 			 @endforeach
 			 </ul>             
 		 `);
-         
 	 },
+    
+    /*
+	 * Listen on event before render a theme, this
+	 * event should call to assign some assets.
+	 */
+	'asset' => function($asset)
+	{
+		$asset->themePath()->add([
+					['style', 'css/style.css'],
+					['script', 'js/script.js']
+					 ]);
+
+		// You may use elixir to concat styles and scripts.
+		$asset->themePath()->add([
+					['styles', 'dist/css/styles.css'],
+					['scripts', 'dist/js/scripts.js']
+					 ]);
+
+		// Or you may use this event to set up your assets.
+		$asset->themePath()->add('core', 'core.js');			
+		$asset->add([
+			['jquery', 'vendor/jquery/jquery.min.js'],
+			['jquery-ui', 'vendor/jqueryui/jquery-ui.min.js', ['jquery']]
+			 ]);
+	},
+   
 
 	/*
 	 * Listen on event before render a theme, this event should
-	 * call to assign some assets, breadcrumb template.
+	 * call to assign some partials or breadcrumb template.
 	 */
 	'beforeRenderTheme' => function($theme)
 	{
-		// You may use this event to set up your assets.
-		$theme->asset()->usePath()->add('core', 'core.js');
-		$theme->asset()->add('jquery', 'vendor/jquery/jquery.min.js');
-		$theme->asset()->add('jquery-ui', 'vendor/jqueryui/jquery-ui.min.js', ['jquery']);
-
 		$theme->partialComposer('header', function($view){
 			$view->with('auth', Auth::user());
 		});
-
 	},
 
 	/*
@@ -362,8 +388,7 @@ The config is convenient for setting up basic CSS/JS, partial composer, breadcru
 	 * call to assign style, script for a layout.
 	 */
 	'beforeRenderLayout' => [
-
-		'default' => function($theme){
+		'mobile' => function($theme){
 			$theme->asset()->usePath()->add('ipad', 'css/layouts/ipad.css');
 		}
 	]
@@ -372,42 +397,42 @@ The config is convenient for setting up basic CSS/JS, partial composer, breadcru
 
 ## Basic usage of assets
 
-Add assets in your route.
+You can add assets on the `asset` method of the config file. If yo want to add assets in your route you can get `$asset` variable from `$theme->asset()`.
 
 ~~~php
+$asset->add('core-style', 'css/style.css');
 // path: public/css/style.css
-$theme->asset()->add('core-style', 'css/style.css');
 
+$asset->container('footer')->add('core-script', 'js/script.js');
 // path: public/js/script.css
-$theme->asset()->container('footer')->add('core-script', 'js/script.js');
 
-// path: public/themes/[current theme]/assets/css/custom.css
+$asset->themePath()->add('custom', 'css/custom.css', ['core-style']);
+// path: public/themes/[current-theme]/assets/css/custom.css
 // This case has dependency with "core-style".
-$theme->asset()->usePath()->add('custom', 'css/custom.css', array('core-style'));
 
+$asset->container('footer')->themePath()->add('custom', 'js/custom.js', array('core-script'));
 // path: public/themes/[current theme]/assets/js/custom.js
 // This case has dependency with "core-script".
-$theme->asset()->container('footer')->usePath()->add('custom', 'js/custom.js', array('core-script'));
 ~~~
-> You can force use theme to look up existing theme by passing parameter to method: `$theme->asset()->usePath('default')`
+> You can force use theme to look up existing theme by passing parameter to method: `$asset->themePath('default')`
 
 Writing in-line style or script.
 
 ~~~php
 // Dependency with.
-$dependencies = array();
+$dependencies = [];
 
 // Writing an in-line script.
-$theme->asset()->writeScript('inline-script', '
+$asset->writeScript('inline-script', '
 	$(function() {
 		console.log("Running");
 	})', $dependencies);
 
 // Writing an in-line style.
-$theme->asset()->writeStyle('inline-style', 'h1{ font-size: 0.9em; }', $dependencies);
+$asset->writeStyle('inline-style', 'h1{ font-size: 0.9em; }', $dependencies);
 
 // Writing an in-line script, style without tag wrapper.
-$theme->asset()->writeContent('custom-inline-script', '
+$asset->writeContent('custom-inline-script', '
 	<script>
 		$(function() {
 			console.log("Running");
@@ -442,7 +467,7 @@ Direct path to theme asset.
 
 #### Preparing group of assets:
 
-Some assets you don't want to add on a page right now, but you still need them sometimes, so "cook" and "serve" is your magic.
+Some assets you don't want to add on a page right now, but you still need them sometimes, so `cook` and `serve` is your magic.
 
 Cook your assets.
 ~~~php
@@ -754,7 +779,7 @@ protected $routeMiddleware = [
 ##### Usage:
 You can apply the middleware to a route or route-group with the string `'theme:[theme],[layout]'`
 ~~~php
-Route::get('/mid', function () {
+Route::get('/', function () {
 	...
 	return Theme::view('index');
 })->middleware('theme:default,layout');
@@ -785,28 +810,29 @@ Print meta tags with common metadata.
 ##### Commands:
 Command | Description 
 ------------ | -------------
-`artisan theme:create name` | Generate theme structure
-`artisan theme:destroy name` | Remove theme exsisting
+`artisan theme:create name` | Generate theme structure.
+`artisan theme:destroy name` | Remove theme exsisting.
 `artisan theme:list` | Show a list of all themes.
-`artisan theme:widget demo default` | Generate widget structure
+`artisan theme:duplicate name new` | Duplicate theme structure from other theme.
+`artisan theme:widget demo default` | Generate widget structure.
 
 ##### Blade Directives:
 Blade | Description 
 ------------ | -------------
 `@get('value')` |  Magic method for get. 
-`@getIfHas('value')` | Like `@get` but show only if exist
+`@getIfHas('value')` | Like `@get` but show only if exist.
 `@partial('value', ['var'=> 'optional'])` | Load the partial from current theme.
-`@section('value', ['var'=> 'optional'])` | Like `@partial` but load from sections folder
-`@content()` | Load the content of the selected view
+`@section('value', ['var'=> 'optional'])` | Like `@partial` but load from sections folder.
+`@content()` | Load the content of the selected view.
 `@styles('optional')` | Render styles declared in theme config.
 `@scripts('optional')` | Render scripts declared in theme config.
 `@dd('value')` | Dump and Die. 
-`@d('value')` | Only dump
+`@d('value')` | Only dump.
 
 ##### Helpers:
 Helper | Description 
 ------------ | -------------
-`protectEmail('email')` | Protect the email address against bots or spiders
+`protectEmail('email')` | Protect the email address against bots or spiders.
 `meta_init()` | Print meta tags with common metadata.
 
 
