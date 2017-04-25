@@ -27,6 +27,22 @@ class ThemeServiceProvider extends ServiceProvider {
 		$this->publishes([$configPath => config_path('theme.php')], 'config');
 	
 	    $router->aliasMiddleware('theme', Middleware\ThemeLoader::class);
+
+	    // Register blade directives:
+		$this->addToBlade(['dd', 'dd(%s);']);
+		$this->addToBlade(['d', 'dump(%s);']);
+
+		$this->addToBlade(['get', 'Theme::get(%s);']);
+		$this->addToBlade(['getIfHas', 'Theme::has(%1$s) ? Theme::get(%1$s) : ""']);
+
+		$this->addToBlade(['partial', 'Theme::partial(%s);']);
+		$this->addToBlade(['sections', 'Theme::partial("sections.".%s);']);
+		$this->addToBlade(['content', null, 'Theme::content();']);
+
+		$this->addToBlade(['asset', 'Theme::asset()->absUrl(%s);']);
+
+		$this->addToBlade(['styles', 'Theme::asset()->container(%s)->styles();', 'Theme::asset()->styles();']);
+		$this->addToBlade(['scripts', 'Theme::asset()->container(%s)->scripts();', 'Theme::asset()->scripts();']);
 	}
 
 	/**
@@ -65,20 +81,6 @@ class ThemeServiceProvider extends ServiceProvider {
 						'theme.duplicate',
 						'theme.destroy'
 						);
-
-		// Register blade directives:
-		$this->addToBlade(['dd', 'dd(%s);']);
-		$this->addToBlade(['d', 'dump(%s);']);
-
-		$this->addToBlade(['get', 'Theme::get(%s);']);
-		$this->addToBlade(['getIfHas', 'Theme::has(%1$s) ? Theme::get(%1$s) : ""']);
-
-		$this->addToBlade(['partial', 'Theme::partial(%s);']);
-		$this->addToBlade(['sections', 'Theme::partial("sections.".%s);']);
-		$this->addToBlade(['content', null, 'Theme::content();']);
-
-		$this->addToBlade(['styles', 'Theme::asset()->container(%s)->styles();', 'Theme::asset()->styles();']);
-		$this->addToBlade(['scripts', 'Theme::asset()->container(%s)->scripts();', 'Theme::asset()->scripts();']);
 
 	}
 

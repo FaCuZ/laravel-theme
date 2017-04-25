@@ -134,6 +134,25 @@ class AssetContainer {
         return $this->configAssetUrl($path, $secure);
     }
 
+    
+    /**
+     * Return asset absolute path with current theme path.
+     *
+     * @param  string  $uri
+     * @param  boolean $secure
+     * @return string
+     */
+    public function absUrl($uri, $secure = null)
+    {
+
+        $source = $this->url($uri, $secure);
+
+        if(substr($source, 0, 7)=='/public') $source = substr($source, 7);
+
+        return url($source);
+    }
+
+
     /**
      * Add an asset to the container.
      *

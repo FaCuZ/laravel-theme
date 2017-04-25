@@ -448,6 +448,9 @@ Render styles and scripts in your blade layout.
 
 // With "footer" container
 @scripts('footer')
+
+// Get a specific path from the asset folder
+@asset('img/image.png')
 ~~~
 > Scripts and Style can be used with or without container
 
@@ -484,9 +487,7 @@ You can prepare on a global in package config.
 // Location: config/theme/config.php
 ....
 	'events' => array(
-
 		....
-
 		// This event will fire as a global you can add any assets you want here.
 		'asset' => function($asset)
 		{
@@ -497,7 +498,6 @@ You can prepare on a global in package config.
 				$asset->add('underscorejs', '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js');
 			});
 		}
-
 	)
 ....
 ~~~
@@ -510,17 +510,17 @@ Theme::asset()->serve('backbone');
 
 Then you can get output:
 ~~~php
----
-<head>
-	@styles()
-	@styles('your-container')
-</head>
-<body>
-	---
-	@scripts()
-	@scripts('your-container')
-</body>
----
+<html>
+  <head>
+      @styles()
+      @styles('your-container')
+  </head>
+  <body>
+      ...
+      @scripts()
+      @scripts('your-container')
+  </body>
+<html>
 ~~~
 
 ## Partials
@@ -563,12 +563,12 @@ $theme->partialComposer('header', function($view)
 
 The `@section` blade directive simplify the access to `/partials/sections/` path:
 ~~~php
-@sections('main');
+@sections('main')
 ~~~
 
 It's the same as:
 ~~~php
-@partial('sections.main');
+@partial('sections.main')
 ~~~
 
 
