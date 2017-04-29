@@ -228,6 +228,8 @@ class AssetContainer {
 
             $this->add($container, $source, $dependencies, $attributes);
         }
+
+        $this->usePath(false);
     }
 
     /**
@@ -317,18 +319,13 @@ class AssetContainer {
      */
     public function style($name, $source, $dependencies = array(), $attributes = array())
     {
-        if ( ! array_key_exists('media', $attributes))
-        {
+        if ( ! array_key_exists('media', $attributes)) {
             $attributes['media'] = 'all';
         }
 
         // Prepend path to theme.
-        if ($this->isUsePath())
-        {
+        if ($this->isUsePath()) {
             $source = $this->evaluatePath($this->getCurrentPath().$source);
-
-            // Reset using path.
-            $this->usePath(false);
         }
 
         $this->register('style', $name, $source, $dependencies, $attributes);
@@ -348,12 +345,8 @@ class AssetContainer {
     public function script($name, $source, $dependencies = array(), $attributes = array())
     {
         // Prepaend path to theme.
-        if ($this->isUsePath())
-        {
+        if ($this->isUsePath()) {
             $source = $this->evaluatePath($this->getCurrentPath().$source);
-
-            // Reset using path.
-            $this->usePath(false);
         }
 
         $this->register('script', $name, $source, $dependencies, $attributes);

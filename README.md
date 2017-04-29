@@ -258,14 +258,14 @@ return $theme->of('home.index', $data)->withCookie($cookie)->render();
 return $theme->of('home.index')->content();
 ~~~
 
-Finding from both theme's view and application's view.
+Finding from both theme's view and application's view:
 ~~~php
 $theme = Theme::uses('default')->layout('default');
 
 return $theme->watch('home.index')->render();
 ~~~
 
-To find the location of a view.
+To find the location of a view:
 
 ~~~php
 $which = $theme->scope('home.index')->location();
@@ -416,7 +416,7 @@ $asset->container('footer')->themePath()->add('custom', 'js/custom.js', array('c
 ~~~
 > You can force use theme to look up existing theme by passing parameter to method: `$asset->themePath('default')`
 
-Writing in-line style or script.
+Writing in-line style or script:
 
 ~~~php
 // Dependency with.
@@ -440,7 +440,7 @@ $asset->writeContent('custom-inline-script', '
 	</script>', $dependencies);
 ~~~
 
-Render styles and scripts in your blade layout.
+Render styles and scripts in your blade layout:
 
 ~~~php
 // Without container
@@ -462,7 +462,7 @@ or a more complex way:
 {!! Theme::asset()->container('footer')->scripts() !!}
 ~~~
 
-Direct path to theme asset.
+Direct path to theme asset:
 
 ~~~php
 {!! Theme::asset()->url('img/image.png') !!}
@@ -481,7 +481,7 @@ Theme::asset()->cook('backbone', function($asset)
 });
 ~~~
 
-You can prepare on a global in package config.
+You can prepare on a global in package config:
 
 ~~~php
 // Location: config/theme/config.php
@@ -502,7 +502,7 @@ You can prepare on a global in package config.
 ....
 ~~~
 
-Serve theme when you need.
+Serve theme when you need:
 ~~~php
 // At the controller.
 Theme::asset()->serve('backbone');
@@ -561,7 +561,7 @@ $theme->partialComposer('header', function($view)
 
 ### Sections
 
-The `@section` blade directive simplify the access to `/partials/sections/` path:
+The `@sections` blade directive simplify the access to `/partials/sections/` path:
 ~~~php
 @sections('main')
 ~~~
