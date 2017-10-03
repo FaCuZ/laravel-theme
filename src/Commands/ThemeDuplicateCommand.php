@@ -57,7 +57,7 @@ class ThemeDuplicateCommand extends Command {
 	 *
 	 * @return void
 	 */
-	public function fire()
+	public function handle()
 	{
 		$theme = strtolower($this->argument('name'));
 		$new_theme = strtolower($this->argument('new-name'));
