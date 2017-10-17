@@ -1161,8 +1161,12 @@ class Theme implements ThemeContract
      */
     public function location($realpath = false)
     {
-        if ($this->view->exists($this->content)) {
-            return ($realpath) ? $this->view->getFinder()->find($this->content) : $this->content;
+        try {
+            if ($this->view->exists($this->content)) {
+                return ($realpath) ? $this->view->getFinder()->find($this->content) : $this->content;
+            }  
+        } catch (\InvalidArgumentException $e) {
+            return null;
         }
     }
 
