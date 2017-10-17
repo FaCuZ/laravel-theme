@@ -57,7 +57,7 @@ class ThemeDestroyCommand extends Command {
 	 *
 	 * @return void
 	 */
-	public function fire()
+	public function handle()
 	{
 		// The theme is not exists.
 		if ( ! $this->files->isDirectory($this->getPath(null)))

@@ -64,7 +64,7 @@ class WidgetGeneratorCommand extends Command {
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
         // Widget class name is camel case.
         $widgetClassName = ucfirst($this->getWidgetName());

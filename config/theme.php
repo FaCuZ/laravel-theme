@@ -49,7 +49,7 @@ return array(
 	|
 	*/
 
-	'themeDir' => 'public/themes',
+	'themeDir' => env('APP_THEME_DIR', 'public/themes'),
 
 
 	/*
