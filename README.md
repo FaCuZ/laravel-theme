@@ -40,7 +40,7 @@ Theme has many features to help you get started with Laravel
 To get the latest version of laravel-themes simply require it in your `composer.json` file.
 
 ~~~json
-"facuz/laravel-themes": "^3.0"
+"facuz/laravel-themes": "^3.1"
 ~~~
 
 You'll then need to run `composer install` to download it and have the autoloader updated.
@@ -49,7 +49,7 @@ Once Theme is installed you need to register the service provider with the appli
 
 ~~~php
 'providers' => [
-
+	...
 	Facuz\Theme\ThemeServiceProvider::class,
 
 ]
@@ -59,7 +59,7 @@ Theme also ships with a facade which provides the static syntax for creating col
 
 ~~~php
 'aliases' => [
-
+	...
 	'Theme' => Facuz\Theme\Facades\Theme::class,
 
 ]
@@ -70,7 +70,7 @@ Publish config using artisan CLI.
 php artisan vendor:publish --provider="Facuz\Theme\ThemeServiceProvider"
 ~~~
 
-It's recommended to add to the .env file the theme that we are going to use
+It's recommended to add to the `.env` file the theme that we are going to use
 ~~~
 APP_THEME=default
 ~~~
@@ -212,9 +212,7 @@ Theme::info("property", "new data");
 ~~~php
 $theme = Theme::uses('default')->layout('mobile');
 
-$data = [
-	'info' => 'Hello World'
-];
+$data = ['info' => 'Hello World'];
 ~~~
 
 ~~~php
@@ -799,6 +797,10 @@ Protect the email address against bots or spiders that index or harvest addresse
 ~~~php
 {!! protectEmail('email@example.com') !!}
 ~~~
+or shorter
+~~~php
+@protect('email@example.com')
+~~~
 ##### Metadata init:
 Print meta tags with common metadata.
 ~~~php
@@ -826,6 +828,7 @@ Blade | Description
 `@content()` | Load the content of the selected view.
 `@styles('optional')` | Render styles declared in theme config.
 `@scripts('optional')` | Render scripts declared in theme config.
+`@protect('value')` | Protect the email address against bots or spiders.
 `@dd('value')` | Dump and Die. 
 `@d('value')` | Only dump.
 
