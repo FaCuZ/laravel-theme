@@ -831,6 +831,7 @@ Blade | Description
 `@protect('value')` | Protect the email address against bots or spiders.
 `@dd('value')` | Dump and Die. 
 `@d('value')` | Only dump.
+`@dv()` | Dump, Die and show all defined variables.
 
 ##### Helpers:
 Helper | Description 

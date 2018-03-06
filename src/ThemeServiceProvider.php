@@ -30,6 +30,7 @@ class ThemeServiceProvider extends ServiceProvider {
 
 	    // Register blade directives:
 		$this->addToBlade(['dd', 'dd(%s);']);
+		$this->addToBlade(['dv', 'dd(get_defined_vars()[%s]);', 'dd(get_defined_vars()["__data"]);']);
 		$this->addToBlade(['d', 'dump(%s);']);
 
 
