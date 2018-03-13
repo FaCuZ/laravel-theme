@@ -74,7 +74,7 @@ class ThemeListCommand extends Command {
             }
         }
         
-		$headers = ['#', 'Nombre'];
+		$headers = ['#', 'Theme name'];
 
 		if(!$empty){
 			$this->table($headers, $themes);
