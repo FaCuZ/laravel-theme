@@ -187,7 +187,7 @@ class WidgetGeneratorCommand extends Command {
      */
     protected function getTemplate($template)
     {
-        $path = realpath(__DIR__.'/../templates/'.$template.'.txt');
+        $path = realpath(__DIR__.'/../templates/'.$template.'.php');
 
         return $this->files->get($path);
     }

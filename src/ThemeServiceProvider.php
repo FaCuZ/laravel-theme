@@ -47,6 +47,8 @@ class ThemeServiceProvider extends ServiceProvider {
 
 		$this->addToBlade(['styles', 'Theme::asset()->container(%s)->styles();', 'Theme::asset()->styles();']);
 		$this->addToBlade(['scripts', 'Theme::asset()->container(%s)->scripts();', 'Theme::asset()->scripts();']);
+
+		$this->addToBlade(['widget', 'Theme::widget(%s)->render();']);
 	}
 
 	/**
@@ -66,7 +68,7 @@ class ThemeServiceProvider extends ServiceProvider {
 		// Register providers:
 		$this->registerAsset();
 		$this->registerTheme();
-		//$this->registerWidget();
+		$this->registerWidget();
 		$this->registerBreadcrumb();
 		$this->registerManifest();
 
@@ -137,13 +139,13 @@ class ThemeServiceProvider extends ServiceProvider {
 	 *
 	 * @return void
 	 */
-	// public function registerWidget()
-	// {
-	//     $this->app['widget'] = $this->app->share(function($app)
-	//     {
-	//         return new Widget($app['view']);
-	//     });
-	// }
+	public function registerWidget()
+	{
+		$this->app->singleton('widget', function($app)
+		{
+			return new Widget($app['view']);
+		});
+	}
 
 	/**
 	 * Register breadcrumb provider.

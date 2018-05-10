@@ -700,13 +700,13 @@ You can create a global widget class using artisan command:
 ~~~bash
 php artisan theme:widget demo --global
 ~~~
-> Widget tpl is located in "resources/views/widgets/{widget-tpl}.{extension}"
+> Widget tpl is located in "resources/views/widgets/{widget-tpl}.blade.php"
 
 Creating a specific theme name.
 ~~~
 php artisan theme:widget demo default 
 ~~~
-> Widget tpl is located in "public/themes/[theme]/widgets/{widget-tpl}.{extension}"
+> Widget tpl is located in "public/themes/[theme]/widgets/{widget-tpl}.blade.php"
 
 Now you will see a widget class at /app/Widgets/WidgetDemo.php
 
@@ -717,7 +717,13 @@ Now you will see a widget class at /app/Widgets/WidgetDemo.php
 ##### Calling your widget in layout or view:
 
 ~~~php
-echo Theme::widget('demo', array('label' => 'Demo Widget'))->render();
+@widget('demo', ['label' => 'Hi!'])
+~~~
+
+or
+
+~~~php
+{!! Theme::widget('demo', ['label' => 'Hi!'])->render() !!}
 ~~~
 
 ## Using theme global
@@ -828,6 +834,7 @@ Blade | Description
 `@content()` | Load the content of the selected view.
 `@styles('optional')` | Render styles declared in theme config.
 `@scripts('optional')` | Render scripts declared in theme config.
+`@widget('value', ['var'=> 'optional'])` | Render widget.
 `@protect('value')` | Protect the email address against bots or spiders.
 `@dd('value')` | Dump and Die. 
 `@d('value')` | Only dump.
