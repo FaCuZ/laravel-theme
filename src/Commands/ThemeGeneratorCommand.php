@@ -20,7 +20,7 @@ class ThemeGeneratorCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Generate theme structure';
+	protected $description = 'Generate theme structure.';
 
 	/**
 	 * Repository config.

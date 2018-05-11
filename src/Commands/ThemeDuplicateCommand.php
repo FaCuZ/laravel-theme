@@ -20,7 +20,7 @@ class ThemeDuplicateCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Duplicate theme structure from other theme';
+	protected $description = 'Duplicate theme structure from other theme.';
 
 	/**
 	 * Repository config.

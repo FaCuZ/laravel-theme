@@ -123,7 +123,7 @@ php artisan theme:duplicate name new-theme
 
 
 
-Create from the applicaton without CLI.
+Create from the application without CLI.
 
 ~~~php
 Artisan::call('theme:create', ['name' => 'foo']);
@@ -208,7 +208,7 @@ Theme::info("property");
 Theme::info("property", "new data"); 
 ~~~
 
-#### Other ways to distray a view:
+#### Other ways to display a view:
 ~~~php
 $theme = Theme::uses('default')->layout('mobile');
 
@@ -268,7 +268,7 @@ To find the location of a view:
 ~~~php
 $which = $theme->scope('home.index')->location();
 
-echo $which; // themer::views.home.index
+echo $which; // theme::views.home.index
 
 $which = $theme->scope('home.index')->location(true);
 
@@ -528,7 +528,7 @@ Render a partial in your layouts or views:
 @partial('header', ['title' => 'Header']);
 ~~~
 
-> This will look up to `/public/themes/[theme]/partials/header.php`, and will add a variable `$title` (opcional)
+> This will look up to `/public/themes/[theme]/partials/header.php`, and will add a variable `$title` (optional)
 
 Partial with current layout specific:
 ~~~php
@@ -599,7 +599,7 @@ Theme::getAnything();
 
 Theme::getFoo();
 
-Theme::get('foo', 'Default msj);
+Theme::get('foo', 'Default msj');
 ~~~
 
 ##### Check if the place exists or not:
@@ -618,13 +618,13 @@ It's the same as:
 @endif
 ~~~
 
-Get argument assigned to content in layout or region.
+Get argument assigned to content in layout or region:
 
 ~~~php
 Theme::getContentArguments();
 Theme::getContentArgument('name');
 ~~~
-To check if it exists
+To check if it exists:
 ~~~php
 Theme::hasContentArgument('name');
 ~~~
@@ -642,7 +642,7 @@ $theme->bind('something', function()
 });
 ~~~
 
-Using bound data on view.
+Using bound data on view:
 
 ~~~php
 echo Theme::bind('something');
@@ -666,14 +666,13 @@ $theme->breadcrumb()->add([[
 			]]);
 ~~~
 
-To render breadcrumbs.
-
+To render breadcrumbs:
 ~~~php
-echo $theme->breadcrumb()->render();
-
-// or
-
-echo Theme::breadcrumb()->render();
+{!! $theme->breadcrumb()->render() !!}
+~~~
+or
+~~~php
+{!! Theme::breadcrumb()->render() !!}
 ~~~
 
 You can set up breadcrumbs template anywhere you want by using a blade template.
@@ -736,7 +735,7 @@ class BaseController extends Controller {
 	/**
 	 * Theme instance.
 	 *
-	 * @var \Teepluss\Theme\Theme
+	 * @var \Facuz\Theme\Theme
 	 */
 	protected $theme;
 
@@ -819,7 +818,7 @@ Print meta tags with common metadata.
 Command | Description 
 ------------ | -------------
 `artisan theme:create name` | Generate theme structure.
-`artisan theme:destroy name` | Remove theme exsisting.
+`artisan theme:destroy name` | Remove a theme.
 `artisan theme:list` | Show a list of all themes.
 `artisan theme:duplicate name new` | Duplicate theme structure from other theme.
 `artisan theme:widget demo default` | Generate widget structure.
@@ -845,16 +844,3 @@ Helper | Description
 ------------ | -------------
 `protectEmail('email')` | Protect the email address against bots or spiders.
 `meta_init()` | Print meta tags with common metadata.
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -20,7 +20,7 @@ class ThemeDestroyCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Remove theme exsisting';
+	protected $description = 'Remove a theme.';
 
 	/**
 	 * Repository config.

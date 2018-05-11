@@ -20,7 +20,7 @@ class WidgetGeneratorCommand extends Command {
      *
      * @var string
      */
-    protected $description = 'Generate widget structure';
+    protected $description = 'Generate widget structure.';
 
     /**
      * Widget view template global.
