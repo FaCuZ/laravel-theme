@@ -58,7 +58,7 @@ class AssetContainer {
      */
     protected function configAssetUrl($path, $secure = null)
     {
-       static $assetUrl;
+        static $assetUrl;
 
         // Remove this.
         $i = 'index.php';
@@ -130,6 +130,8 @@ class AssetContainer {
         }
 
         $path = $this->getCurrentPath().$uri;
+
+        if(substr($path, 0, 6)=='public') $path = substr($path, 7);
 
         return $this->configAssetUrl($path, $secure);
     }
