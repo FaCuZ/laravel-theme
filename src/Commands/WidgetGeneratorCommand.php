@@ -85,6 +85,12 @@ class WidgetGeneratorCommand extends Command {
         if ($this->option('global') === false and ! $this->argument('theme')){
             return $this->error('Please specific a theme name or use option -g to create as a global widget.');
         }
+       
+        $theme_path = base_path($this->config->get('theme.themeDir').'/'.$this->getTheme());
+       
+        if (is_dir($theme_path) === false){
+            return $this->error('The theme "'.$this->getTheme().'" does not exist.');
+        }
 
         // Create as a global use -g.
         if ($this->option('global') === true){
