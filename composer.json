@@ -1,5 +1,5 @@
 {
-    "name": "facuz/laravel-themes",
+    "name": "itcare/laravel-themes",
     "description": "Theme will help you organize your themes inside Laravel projects easily and maintain its related assets, layouts and partials for the theme in single directory. (Based on teepluss/theme)",
     "keywords": ["laravel", "theme", "layout", "asset", "widget"],
     "homepage": "https://github.com/facuz/laravel-theme",
