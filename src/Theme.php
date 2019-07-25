@@ -268,8 +268,8 @@ class Theme implements ThemeContract
     {
         $themes = [];
 
-        if ($this->files->exists($path)) {
-            $scannedThemes = $this->files->directories($path);
+        if ($this->files->exists($this->getThemePath().'../')) {
+            $scannedThemes = $this->files->directories($this->getThemePath().'../');
             foreach ($scannedThemes as $theme) {
                 $themes[] = basename($theme);
             }
