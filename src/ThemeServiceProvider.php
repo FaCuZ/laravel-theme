@@ -37,8 +37,8 @@ class ThemeServiceProvider extends ServiceProvider {
 		$this->addToBlade(['get', 'Theme::get(%s);']);
 		$this->addToBlade(['getIfHas', 'Theme::has(%1$s) ? Theme::get(%1$s) : ""']);
 
-		$this->addToBlade(['partial', 'Theme::partial(%s);']);
-		$this->addToBlade(['sections', 'Theme::partial("sections.".%s);']);
+		$this->addToBlade(['partial', 'Theme::partial(%s, get_defined_vars()["__data"]);']);
+		$this->addToBlade(['sections', 'Theme::partial("sections.".%s, get_defined_vars()["__data"]);']);
 		$this->addToBlade(['content', null, 'Theme::content();']);
 
 		$this->addToBlade(['asset', 'Theme::asset()->absUrl(%s);']);
