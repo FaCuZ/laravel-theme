@@ -752,7 +752,14 @@ class Theme implements ThemeContract
         $path = $partialDir.'.'.$view;
 
         if (! $this->view->exists($path)) {
-            throw new UnknownPartialFileException("Partial view [$view] not found.");
+            $fallback = config('theme.view_fallback', '');
+            if (!empty($fallback)) {
+                $path = "$fallback.partials.$view";
+            }
+
+            if (! $this->view->exists($path)) {
+                throw new UnknownPartialFileException("Partial view [$view] not found.");
+            }
         }
 
         $partial = $this->view->make($path, $args)->render();
@@ -761,6 +768,7 @@ class Theme implements ThemeContract
         return $this->regions[$view];
     }
 
+    
     /**
      * Watch and set up a partial from anywhere.
      *
@@ -1104,7 +1112,7 @@ class Theme implements ThemeContract
             if (!empty($fallback)) {
                 $view = "$fallback.$view";
             }
-            
+
             return $this->of($view, $args, $type);
         }
     }
