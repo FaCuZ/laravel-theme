@@ -148,6 +148,7 @@ class Theme implements ThemeContract
      */
     protected $compilers = array();
 
+
     /**
      * Create a new theme instance.
      *
@@ -1096,7 +1097,14 @@ class Theme implements ThemeContract
     {
         try {
             return $this->scope($view, $args, $type);
-        } catch (\InvalidArgumentException $e) {
+        } 
+        
+        catch (\InvalidArgumentException $e) {
+            $fallback = config('theme.view_fallback', '');
+            if (!empty($fallback)) {
+                $view = "$fallback.$view";
+            }
+            
             return $this->of($view, $args, $type);
         }
     }
