@@ -1249,7 +1249,14 @@ class Theme implements ThemeContract
         $path = $this->getThemeNamespace('layouts.'.$this->layout);
 
         if (!$this->view->exists($path)) {
-            throw new UnknownLayoutFileException("Layout [$this->layout] not found.");
+            $fallback = config('theme.view_fallback', '');
+            if (!empty($fallback)) {
+                $path = "$fallback.layouts." . $this->layout;
+            }
+
+            if (!$this->view->exists($path)) {
+                throw new UnknownLayoutFileException("Layout [$this->layout] not found.");
+            }
         }
 
         $content = $this->view->make($path)->render();
