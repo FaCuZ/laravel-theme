@@ -1255,7 +1255,10 @@ class Theme implements ThemeContract
             }
 
             if (!$this->view->exists($path)) {
-                throw new UnknownLayoutFileException("Layout [$this->layout] not found.");
+                $path = "$fallback.layouts.layout";
+                if (!$this->view->exists($path)) {
+                    throw new UnknownLayoutFileException("Layout [$this->layout] not found.");
+                }
             }
         }
 
