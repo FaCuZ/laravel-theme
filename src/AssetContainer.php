@@ -192,7 +192,7 @@ class AssetContainer {
         }
         else
         {
-            $type = (pathinfo($source, PATHINFO_EXTENSION) == 'css') ? 'style' : 'script';
+            $type = (pathinfo(parse_url($source, PHP_URL_PATH), PATHINFO_EXTENSION) == 'css') ? 'style' : 'script';
 
             // Remove unnecessary slashes from internal path.
             if ( ! preg_match('|^//|', $source))

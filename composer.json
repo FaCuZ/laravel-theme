@@ -33,5 +33,15 @@
             "src/helpers.php"
         ]
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Facuz\\Theme\\ThemeServiceProvider"
+            ],
+            "aliases": {
+                "Theme": "Facuz\\Theme\\Facades\\Theme"
+            }
+        }
+    },
     "minimum-stability": "dev"
 }
