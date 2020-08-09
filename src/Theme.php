@@ -414,7 +414,7 @@ class Theme implements ThemeContract
         // Evaluate theme config.
         $this->themeConfig = $this->evaluateConfig($this->themeConfig);
 
-        return is_null($key) ? $this->themeConfig : Arr::get($this->themeConfig, $key);
+        return is_null($key) ? $this->themeConfig : \Arr::get($this->themeConfig, $key);
     }
 
     /**
