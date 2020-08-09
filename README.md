@@ -1,11 +1,11 @@
 # Theme Management for Laravel
 
-Laravel-Theme is a theme management for Laravel 5+, it is the easiest way to organize your skins, layouts and assets.
+Laravel-Theme is a theme management for Laravel 5+ (last check 6.3), it is the easiest way to organize your skins, layouts and assets.
 
 This package is based on [teepluss\theme](https://github.com/teepluss/laravel-theme/)
 
 >##### Differences with teepluss version:
->- Compatible with laravel 5.4+.
+>- Compatible with laravel 5+
 >- Removed twig compatibility (Reduces the package by 94%).
 >- Blade directives
 >- Better base template.
@@ -40,7 +40,7 @@ Theme has many features to help you get started with Laravel
 To get the latest version of laravel-themes simply require it in your `composer.json` file.
 
 ~~~json
-"facuz/laravel-themes": "^3.1"
+"facuz/laravel-themes": "^3.2"
 ~~~
 
 You'll then need to run `composer install` to download it and have the autoloader updated.
