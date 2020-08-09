@@ -83,7 +83,21 @@ return array(
 
 	'namespaces' => array(
 		'widget' => 'App\Widgets'
- 	),
+	 ),
+	 
+
+	/*
+	|--------------------------------------------------------------------------
+	| View Fallback path
+	|--------------------------------------------------------------------------
+	|
+	| You can define a view fallback path that will be appended when the theme
+	| doesn't have its view file. This is useful if you want to have a base
+	| theme in different folder.
+	|
+	*/
+	 
+	'view_fallback' => '',
 
 	/*
 	|--------------------------------------------------------------------------

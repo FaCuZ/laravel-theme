@@ -149,6 +149,7 @@ class Theme implements ThemeContract
      */
     protected $compilers = array();
 
+
     /**
      * Create a new theme instance.
      *
@@ -752,7 +753,14 @@ class Theme implements ThemeContract
         $path = $partialDir.'.'.$view;
 
         if (! $this->view->exists($path)) {
-            throw new UnknownPartialFileException("Partial view [$view] not found.");
+            $fallback = config('theme.view_fallback', '');
+            if (!empty($fallback)) {
+                $path = "$fallback.partials.$view";
+            }
+
+            if (! $this->view->exists($path)) {
+                throw new UnknownPartialFileException("Partial view [$view] not found.");
+            }
         }
 
         $partial = $this->view->make($path, $args)->render();
@@ -761,6 +769,7 @@ class Theme implements ThemeContract
         return $this->regions[$view];
     }
 
+    
     /**
      * Watch and set up a partial from anywhere.
      *
@@ -1097,7 +1106,14 @@ class Theme implements ThemeContract
     {
         try {
             return $this->scope($view, $args, $type);
-        } catch (\InvalidArgumentException $e) {
+        } 
+        
+        catch (\InvalidArgumentException $e) {
+            $fallback = config('theme.view_fallback', '');
+            if (!empty($fallback)) {
+                $view = "$fallback.$view";
+            }
+
             return $this->of($view, $args, $type);
         }
     }
@@ -1234,7 +1250,17 @@ class Theme implements ThemeContract
         $path = $this->getThemeNamespace('layouts.'.$this->layout);
 
         if (!$this->view->exists($path)) {
-            throw new UnknownLayoutFileException("Layout [$this->layout] not found.");
+            $fallback = config('theme.view_fallback', '');
+            if (!empty($fallback)) {
+                $path = "$fallback.layouts." . $this->layout;
+            }
+
+            if (!$this->view->exists($path)) {
+                $path = "$fallback.layouts.layout";
+                if (!$this->view->exists($path)) {
+                    throw new UnknownLayoutFileException("Layout [$this->layout] not found.");
+                }
+            }
         }
 
         $content = $this->view->make($path)->render();

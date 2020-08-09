@@ -63,6 +63,14 @@ abstract class Widget {
     public $enable = true;
 
     /**
+     * Default fallback blade path.
+     *
+     * @var string
+     */
+    public $path = 'widgets';
+
+
+    /**
      * Create a new theme instance.
      *
      * @param  Theme                         $theme
@@ -202,7 +210,7 @@ abstract class Widget {
 
         // If not found in theme widgets directory, try to watch in views/widgets again.
         if($this->watch === true and ! $this->view->exists($path)){
-            $path = 'widgets.'.$this->template;
+            $path = $this->path.'.'.$this->template;
         }
 
         // Error file not exists.
