@@ -186,7 +186,6 @@ class Theme implements ThemeContract
 
         $this->breadcrumb = $breadcrumb;
 
-        //$this->theme = $this->getConfig('themeDefault');
         $this->theme($this->getConfig('themeDefault'));
 
         //$this->layout = $this->getConfig('layoutDefault');
@@ -209,9 +208,6 @@ class Theme implements ThemeContract
     public function inject($variable, $service)
     {
         $this->argInjected[$variable] = app($service);
-        /*
-        var_dump("<?php \${$variable} = app('{$service}'); ?>");
-        */
     }
 
 
@@ -247,7 +243,7 @@ class Theme implements ThemeContract
      */
     public function info($property = null, $value = null) {
         $info = $this->manifest;
-
+        
         $info->setThemePath($this->getThemePath());
 
         if($value && $property){
@@ -268,15 +264,7 @@ class Theme implements ThemeContract
      */
     public function all()
     {
-        $themes = [];
-
-        if ($this->files->exists($this->getThemePath().'../')) {
-            $scannedThemes = $this->files->directories($this->getThemePath().'../');
-            foreach ($scannedThemes as $theme) {
-                $themes[] = basename($theme);
-            }
-        }
-        return new Collection($themes);
+        return new Collection(optional(app('themes'))->getThemeNames() ?? []);
     }
 
     /**
@@ -326,9 +314,7 @@ class Theme implements ThemeContract
      */
     public function exists($theme)
     {
-        $path = base_path($this->path($theme)).'/';
-
-        return is_dir($path);
+        return app('themes')->has($theme);
     }
 
     /**
@@ -401,14 +387,16 @@ class Theme implements ThemeContract
         // This config having buffer by array object.
         if ($this->theme and ! isset($this->themeConfig['themes'][$this->theme])) {
             $this->themeConfig['themes'][$this->theme] = array();
+            $minorConfigPath = base_path($this->path($this->theme) . '/config.php');
 
-            try {
-                // Require public theme config.
-                $minorConfigPath = base_path($this->themeConfig['themeDir'].'/'.$this->theme.'/config.php');
-
-                $this->themeConfig['themes'][$this->theme] = $this->files->getRequire($minorConfigPath);
-            } catch (\Illuminate\Filesystem\FileNotFoundException $e) {
-                //var_dump($e->getMessage());
+            if (file_exists($minorConfigPath)) {
+                try {
+                    $this->themeConfig['themes'][$this->theme] = $this->files->getRequire($minorConfigPath);  
+                } 
+                
+                catch (\Illuminate\Filesystem\FileNotFoundException $e) {
+                    //var_dump($e->getMessage());
+                }
             }
         }
 
@@ -563,15 +551,7 @@ class Theme implements ThemeContract
      */
     public function path($forceThemeName = null)
     {
-        $themeDir = $this->getConfig('themeDir');
-
-        $theme = $this->theme;
-
-        if ($forceThemeName != false) {
-            $theme = $forceThemeName;
-        }
-
-        return $themeDir.'/'.$theme;
+        return app('themes')->get(!empty($forceThemeName) ? "$forceThemeName.path" : "$this->theme.path");
     }
 
     /**

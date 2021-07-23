@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
+
 class ThemeServiceProvider extends ServiceProvider {
 
 	/**
@@ -66,6 +67,7 @@ class ThemeServiceProvider extends ServiceProvider {
 		$app = $this->app;
 
 		// Register providers:
+        $this->registerThemeRepository();
 		$this->registerAsset();
 		$this->registerTheme();
 		$this->registerWidget();
@@ -235,6 +237,22 @@ class ThemeServiceProvider extends ServiceProvider {
 		$this->app->singleton('theme.list', function($app)
 		{
 			return new Commands\ThemeListCommand($app['config'], $app['files']);
+		});
+	}
+
+
+    /**
+	 * Register themes repository.
+	 *
+	 * @return void
+	 */
+	public function registerThemeRepository()
+	{
+		$this->app->singleton('themes', function($app)
+		{
+            $repository = new ThemeRepository();
+            $repository->scan(config('theme.themeDir', ''));
+			return $repository;
 		});
 	}
 
