@@ -8,7 +8,8 @@ if (!function_exists('theme')){
 	 * @param  string  $layoutName
 	 * @return \Facuz\Theme\Theme
 	 */
-	function theme($themeName = null, $layoutName = null){
+	function theme($themeName = null, $layoutName = null) 
+    {
 		$theme = app('theme');
 
 		if ($themeName){
@@ -31,7 +32,8 @@ if (!function_exists('protectEmail')){
 	 * @param  string  $email
 	 * @return string
 	 */
-	function protectEmail($email) {
+	function protectEmail($email) 
+    {
 		$p = str_split(trim($email));
 		$new_mail = '';
 
@@ -50,9 +52,26 @@ if (!function_exists('meta_init')){
 	 *
 	 * @return string
 	 */
-	function meta_init() {
+	function meta_init() 
+    {
 		return '<meta charset="utf-8">'.
 		'<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">'.
 		'<meta name="viewport" content="width=device-width, initial-scale=1">';
 	}
+}
+
+
+
+if (!function_exists('theme_path')) {
+    /**
+     * Generate path to theme
+     *
+     * @param string $theme
+     * @param string $path
+     * @return string
+     */
+    function theme_path(string $theme = '', string $path = ''): string
+    {
+        return app('themes')->path($theme, $path);
+    }
 }
