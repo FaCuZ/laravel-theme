@@ -1250,11 +1250,19 @@ class Theme implements ThemeContract
         $path = $this->getThemeNamespace('layouts.'.$this->layout);
 
         if (!$this->view->exists($path)) {
+
+            // Try global fallback with the same layout
             $fallback = config('theme.view_fallback', '');
             if (!empty($fallback)) {
                 $path = "$fallback.layouts." . $this->layout;
             }
+        
+            // Fallback to the theme layout first if possible
+            if (!$this->view->exists($path)) {
+                $path = $this->getThemeNamespace('layouts.layout');
+            }
 
+            // Fallback to global layout when nothing else found or break for error
             if (!$this->view->exists($path)) {
                 $path = "$fallback.layouts.layout";
                 if (!$this->view->exists($path)) {
