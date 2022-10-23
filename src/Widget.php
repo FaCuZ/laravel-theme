@@ -1,10 +1,14 @@
-<?php namespace Facuz\Theme;
+<?php
+
+namespace Facuz\Theme;
 
 use Closure;
 use Illuminate\View\Factory;
 use Illuminate\Config\Repository;
+use Illuminate\Support\Arr;
 
-abstract class Widget {
+abstract class Widget
+{
 
     /**
      * Theme instanced.
@@ -144,7 +148,7 @@ abstract class Widget {
      */
     public function getAttribute($key, $default = null)
     {
-        return array_get($this->attributes, $key, $default);
+        return Arr::get($this->attributes, $key, $default);
     }
 
     /**
@@ -165,8 +169,7 @@ abstract class Widget {
     public function beginWidget()
     {
         // Init widget when enable is true.
-        if ($this->enable == true)
-        {
+        if ($this->enable == true) {
             $this->init($this->theme);
         }
     }
@@ -204,17 +207,17 @@ abstract class Widget {
      */
     public function render()
     {
-        if($this->enable == false) return '';
+        if ($this->enable == false) return '';
 
-        $path = $this->theme->getThemeNamespace('widgets.'.$this->template);
+        $path = $this->theme->getThemeNamespace('widgets.' . $this->template);
 
         // If not found in theme widgets directory, try to watch in views/widgets again.
-        if($this->watch === true and ! $this->view->exists($path)){
-            $path = $this->path.'.'.$this->template;
+        if ($this->watch === true and !$this->view->exists($path)) {
+            $path = $this->path . '.' . $this->template;
         }
 
         // Error file not exists.
-        if(!$this->view->exists($path)){
+        if (!$this->view->exists($path)) {
             throw new UnknownWidgetFileException("Widget view [$this->template] not found.");
         }
 
@@ -222,5 +225,4 @@ abstract class Widget {
 
         return $widget;
     }
-
 }

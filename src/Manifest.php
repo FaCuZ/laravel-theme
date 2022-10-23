@@ -1,33 +1,36 @@
-<?php namespace Facuz\Theme;
+<?php
+
+namespace Facuz\Theme;
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 
 class Manifest
 {
-     /**
-     * Path of all themes.
-     *
-     * @var array
-     */
-    protected $themePath;
-  
-    /**
-     * Filesystem.
-     *
-     * @var \Illuminate\Filesystem\Filesystem
-     */
-    protected $files;
+	/**
+	 * Path of all themes.
+	 *
+	 * @var array
+	 */
+	protected $themePath;
 
-    /**
-     * Create a new theme instance.
-     *
-     * @param  \Illuminate\Filesystem\Filesystem $files
-     * @return \Facuz\Theme\Manifest
-     */
+	/**
+	 * Filesystem.
+	 *
+	 * @var \Illuminate\Filesystem\Filesystem
+	 */
+	protected $files;
+
+	/**
+	 * Create a new theme instance.
+	 *
+	 * @param  \Illuminate\Filesystem\Filesystem $files
+	 * @return \Facuz\Theme\Manifest
+	 */
 	public function __construct(Filesystem $files)
-    {
-        $this->files = $files;
-    }
+	{
+		$this->files = $files;
+	}
 
 
 	/**
@@ -36,9 +39,10 @@ class Manifest
 	 * @param string $themePath
 	 * @return void
 	 */
-    public function setThemePath($themePath){
-    	$this->themePath = $themePath;
-    }
+	public function setThemePath($themePath)
+	{
+		$this->themePath = $themePath;
+	}
 
 	/**
 	 * Get path of theme JSON file.
@@ -47,7 +51,7 @@ class Manifest
 	 */
 	public function getJsonPath()
 	{
-		return $this->themePath.'/theme.json';
+		return $this->themePath . '/theme.json';
 	}
 
 	/**
@@ -93,7 +97,7 @@ class Manifest
 	 */
 	public function getProperty($key, $default = null)
 	{
-		return array_get($this->getJsonContents(), $key, $default);
+		return Arr::get($this->getJsonContents(), $key, $default);
 	}
 
 	/**
@@ -122,6 +126,4 @@ class Manifest
 
 		return false;
 	}
-
-
 }
